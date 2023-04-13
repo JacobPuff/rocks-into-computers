@@ -27,7 +27,7 @@ export class AndGate extends Node {
         let andOut = this.inputA() && this.inputB()
         return this.isNAND() ? !andOut : andOut
     });
-    private readonly getOutputPos = () => this.isNAND() ? new Vector2(0,-54) : new Vector2(0,-35)
+    private readonly getOutputPos = () => this.isNAND() ? new Vector2(0,-35-sizes.NOT_CIRCLE_SIZE) : new Vector2(0,-35)
     public readonly inputAPos: Vector2 = new Vector2(-22,55).transformAsPoint(this.localToWorld());
     public readonly inputBPos: Vector2 = new Vector2(22,55).transformAsPoint(this.localToWorld());
     public readonly outputPos: Vector2 = this.getOutputPos().transformAsPoint(this.localToWorld());
