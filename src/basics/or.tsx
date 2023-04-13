@@ -5,14 +5,14 @@ import { Vector2 } from '@motion-canvas/core/lib/types';
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
 
-export interface AndGateProps extends NodeProps {
+export interface OrGateProps extends NodeProps {
     // properties
     inputA?: SignalValue<boolean> // This could just be inputs[]
     inputB?: SignalValue<boolean>
-    isNAND?: SignalValue<boolean>
+    isNOR?: SignalValue<boolean>
   }
   
-export class AndGate extends Node {
+export class OrGate extends Node {
     // implementation
     @initial(false)
     @signal()
@@ -22,17 +22,17 @@ export class AndGate extends Node {
     public declare inputB: SimpleSignal<boolean, this>;
     @initial(false)
     @signal()
-    public declare isNAND: SimpleSignal<boolean, this>;
+    public declare isNOR: SimpleSignal<boolean, this>;
     public output: SimpleSignal<boolean, this> = createSignal(() => {
-        let andOut = this.inputA() && this.inputB()
-        return this.isNAND() ? !andOut : andOut
+        let out = this.inputA() || this.inputB()
+        return this.isNOR() ? !out : out
     });
-    private readonly getOutputPos = () => this.isNAND() ? new Vector2(0,-35-sizes.NOT_CIRCLE_SIZE) : new Vector2(0,-35)
+    private readonly getOutputPos = () => this.isNOR() ? new Vector2(0,-35-sizes.NOT_CIRCLE_SIZE) : new Vector2(0,-35)
     public readonly inputAPos: Vector2 = new Vector2(-22,55).transformAsPoint(this.localToWorld());
     public readonly inputBPos: Vector2 = new Vector2(22,55).transformAsPoint(this.localToWorld());
     public readonly outputPos: Vector2 = this.getOutputPos().transformAsPoint(this.localToWorld());
 
-    public constructor(props?: AndGateProps) {
+    public constructor(props?: OrGateProps) {
         super({
             ...props,
         })
@@ -57,7 +57,7 @@ export class AndGate extends Node {
                 stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
                 startAngle={180}
             />
-            {(this.isNAND() &&
+            {(this.isNOR() &&
                 <Circle
                     fill={colors.GATE_COLOR}
                     size={sizes.NOT_CIRCLE_SIZE}
@@ -67,7 +67,7 @@ export class AndGate extends Node {
                 />
             )}
             <Txt
-                text={this.isNAND() ? "NAND": "AND"}
+                text="AND"
                 fill={colors.TEXT_COLOR}
                 fontFamily="Helvetica"
                 fontSize={20}
