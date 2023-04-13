@@ -1,4 +1,4 @@
-import {Circle, NodeProps, Node, Txt, Rect} from '@motion-canvas/2d/lib/components';
+import {Circle, NodeProps, Node, Txt, Rect, Spline, Knot} from '@motion-canvas/2d/lib/components';
 import { SignalValue, SimpleSignal, createSignal } from '@motion-canvas/core/lib/signals';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
 import { Vector2 } from '@motion-canvas/core/lib/types';
@@ -28,8 +28,8 @@ export class OrGate extends Node {
         return this.isNOR() ? !out : out
     });
     private readonly getOutputPos = () => this.isNOR() ? new Vector2(0,-35-sizes.NOT_CIRCLE_SIZE) : new Vector2(0,-35)
-    public readonly inputAPos: Vector2 = new Vector2(-22,55).transformAsPoint(this.localToWorld());
-    public readonly inputBPos: Vector2 = new Vector2(22,55).transformAsPoint(this.localToWorld());
+    public readonly inputAPos: Vector2 = new Vector2(-22,48).transformAsPoint(this.localToWorld());
+    public readonly inputBPos: Vector2 = new Vector2(22,48).transformAsPoint(this.localToWorld());
     public readonly outputPos: Vector2 = this.getOutputPos().transformAsPoint(this.localToWorld());
 
     public constructor(props?: OrGateProps) {
@@ -40,34 +40,41 @@ export class OrGate extends Node {
             <>
             {/* Test Rect for sizing purposes */}
             {/* <Rect fill="#ffffff" width={120} height={120}/> */}
-            <Rect
+            <Spline
                 fill={colors.GATE_COLOR}
-                y={31}
-                width={90}
-                height={50}
                 lineWidth={sizes.WIRE_WIDTH}
                 stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
-                lineJoin="round"
-            />
-            <Circle
-                fill={colors.GATE_COLOR}
-                size={90}
-                y={10}
-                lineWidth={sizes.WIRE_WIDTH}
-                stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
-                startAngle={180}
-            />
+                lineCap="round"
+                smoothness={0.3}
+                closed
+            >
+                <Knot
+                    position={[0, -40]}
+                    startHandle={[0, 0]}
+                />
+                <Knot position={[40,  0]}/>
+                <Knot
+                    position={[44, 55]}
+                    startHandle={[0, 0]}
+                />
+                <Knot position={[0, 45]}/>
+                <Knot
+                    position={[-44, 55]}
+                    startHandle={[0, 0]}
+                />
+                <Knot  position={[-40, 0]}/>
+            </Spline>
             {(this.isNOR() &&
                 <Circle
                     fill={colors.GATE_COLOR}
                     size={sizes.NOT_CIRCLE_SIZE}
-                    y={-45}
+                    y={-48}
                     lineWidth={sizes.WIRE_WIDTH}
                     stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
                 />
             )}
             <Txt
-                text="AND"
+                text={this.isNOR() ? "NOR": "OR"}
                 fill={colors.TEXT_COLOR}
                 fontFamily="Helvetica"
                 fontSize={20}

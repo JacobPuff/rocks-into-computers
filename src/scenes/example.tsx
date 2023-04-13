@@ -2,6 +2,7 @@ import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { AndGate } from '../basics/and';
+import { OrGate } from '../basics/or';
 import { Wire } from '../basics/wire';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
 import {BACKGROUND_COLOR} from '../globalColors'
@@ -11,7 +12,7 @@ import { createSignal } from '@motion-canvas/core/lib/signals';
 import { Txt } from '@motion-canvas/2d/lib/components';
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
-  const andGate = createRef<AndGate>();
+  const orGate = createRef<OrGate>();
   const wires: Wire[] = [];
   const firstInput = createSignal(true)
   const secondInput = createSignal(true)
@@ -29,12 +30,12 @@ export default makeScene2D(function* (view) {
         rotation={90}
         inputA={firstInput}
       />
-      <AndGate
-        ref={andGate}
+      <OrGate
+        ref={orGate}
         x={200 + testXOffset}
         y={100 + testYOffset}
         rotation={90}
-        isNAND={true}
+        isNOR={false}
         inputA={firstNot().output}
         inputB={secondInput}
       />
@@ -62,8 +63,8 @@ export default makeScene2D(function* (view) {
         points={[
           firstNot().outputPos,
           [100 + testXOffset, 0 + testYOffset],
-          [100 + testXOffset,andGate().inputAPos.y],
-          andGate().inputAPos
+          [100 + testXOffset,orGate().inputAPos.y],
+          orGate().inputAPos
         ]}
       />
       <Wire
@@ -71,19 +72,19 @@ export default makeScene2D(function* (view) {
         powered={secondInput}
         points={[
           [100 + testXOffset, 200 + testYOffset],
-          [100 + testXOffset,andGate().inputBPos.y],
-          [100 + testXOffset,andGate().inputBPos.y],
-          andGate().inputBPos
+          [100 + testXOffset,orGate().inputBPos.y],
+          [100 + testXOffset,orGate().inputBPos.y],
+          orGate().inputBPos
         ]}
       />
 
       <Wire
         ref={makeRef(wires, wires.length)}
         jointEnd
-        powered={andGate().output}
+        powered={orGate().output}
         points={[
-          andGate().outputPos,
-          [andGate().outputPos.x+50,100 + testYOffset]
+          orGate().outputPos,
+          [orGate().outputPos.x+50,100 + testYOffset]
         ]}/>
     </>
   );
