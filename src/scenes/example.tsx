@@ -34,6 +34,7 @@ export default makeScene2D(function* (view) {
         x={200 + testXOffset}
         y={100 + testYOffset}
         rotation={90}
+        isNAND={true}
         inputA={firstNot().output}
         inputB={secondInput}
       />
@@ -100,6 +101,7 @@ export default makeScene2D(function* (view) {
     secondInput(!secondInput())
     yield* waitFor(2)
     firstInput(!firstInput())
+    yield* waitFor(2)
     secondInput(!secondInput())
   })
   yield* waitFor(12)

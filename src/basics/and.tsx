@@ -9,6 +9,7 @@ export interface AndGateProps extends NodeProps {
     // properties
     inputA?: SignalValue<boolean> // This could just be inputs[]
     inputB?: SignalValue<boolean>
+    isNAND?: SignalValue<boolean>
   }
   
 export class AndGate extends Node {
@@ -19,10 +20,17 @@ export class AndGate extends Node {
     @initial(false)
     @signal()
     public declare inputB: SimpleSignal<boolean, this>;
-    public output: SimpleSignal<boolean, this> = createSignal(() => this.inputA() && this.inputB());
-    public readonly inputAPos: Vector2 = new Vector2(-22,50).transformAsPoint(this.localToWorld());
-    public readonly inputBPos: Vector2 = new Vector2(22,50).transformAsPoint(this.localToWorld());
-    public readonly outputPos: Vector2 = new Vector2(0,-54).transformAsPoint(this.localToWorld());
+    @initial(false)
+    @signal()
+    public declare isNAND: SimpleSignal<boolean, this>;
+    public output: SimpleSignal<boolean, this> = createSignal(() => {
+        let andOut = this.inputA() && this.inputB()
+        return this.isNAND() ? !andOut : andOut
+    });
+    private readonly getOutputPos = () => this.isNAND() ? new Vector2(0,-54) : new Vector2(0,-35)
+    public readonly inputAPos: Vector2 = new Vector2(-22,55).transformAsPoint(this.localToWorld());
+    public readonly inputBPos: Vector2 = new Vector2(22,55).transformAsPoint(this.localToWorld());
+    public readonly outputPos: Vector2 = this.getOutputPos().transformAsPoint(this.localToWorld());
 
     public constructor(props?: AndGateProps) {
         super({
@@ -34,9 +42,9 @@ export class AndGate extends Node {
             {/* <Rect fill="#ffffff" width={120} height={120}/> */}
             <Rect
                 fill={colors.GATE_COLOR}
-                y={21}
+                y={31}
                 width={90}
-                height={70}
+                height={50}
                 lineWidth={sizes.WIRE_WIDTH}
                 stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
                 lineJoin="round"
@@ -44,18 +52,27 @@ export class AndGate extends Node {
             <Circle
                 fill={colors.GATE_COLOR}
                 size={90}
-                y={-10}
+                y={10}
                 lineWidth={sizes.WIRE_WIDTH}
                 stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
                 startAngle={180}
             />
+            {(this.isNAND() &&
+                <Circle
+                    fill={colors.GATE_COLOR}
+                    size={sizes.NOT_CIRCLE_SIZE}
+                    y={-45}
+                    lineWidth={sizes.WIRE_WIDTH}
+                    stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
+                />
+            )}
             <Txt
                 text="AND"
                 fill={colors.TEXT_COLOR}
                 fontFamily="Helvetica"
                 fontSize={20}
                 fontWeight={700}
-                y={7}
+                y={17}
             />
             </>
         );
