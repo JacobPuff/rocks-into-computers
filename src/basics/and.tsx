@@ -1,11 +1,9 @@
-import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
-import {Circle,Polygon, NodeProps, Node, Spline, Knot, Txt, Rect} from '@motion-canvas/2d/lib/components';
-import { createRef } from '@motion-canvas/core/lib/utils';
+import {Circle, NodeProps, Node, Txt, Rect} from '@motion-canvas/2d/lib/components';
 import { SignalValue, SimpleSignal, createSignal } from '@motion-canvas/core/lib/signals';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
+import { Vector2 } from '@motion-canvas/core/lib/types';
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
-import { Vector2 } from '@motion-canvas/core/lib/types';
 
 export interface AndGateProps extends NodeProps {
     // properties
@@ -15,8 +13,6 @@ export interface AndGateProps extends NodeProps {
   
 export class AndGate extends Node {
     // implementation
-    private readonly notCircle = createRef<Circle>();
-    private readonly notPolygon = createRef<Polygon>();
     @initial(false)
     @signal()
     public declare inputA: SimpleSignal<boolean, this>;
@@ -37,7 +33,6 @@ export class AndGate extends Node {
             {/* Test Rect for sizing purposes */}
             {/* <Rect fill="#ffffff" width={120} height={120}/> */}
             <Rect
-                ref={this.notPolygon}
                 fill={colors.GATE_COLOR}
                 y={21}
                 width={90}
