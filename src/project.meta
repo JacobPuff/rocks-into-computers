@@ -1,0 +1,32 @@
+{
+  "version": 0,
+  "shared": {
+    "background": null,
+    "range": [
+      0,
+      null
+    ],
+    "size": {
+      "x": 800,
+      "y": 500
+    },
+    "audioOffset": 0
+  },
+  "preview": {
+    "fps": 30,
+    "resolutionScale": 2
+  },
+  "rendering": {
+    "fps": 24,
+    "resolutionScale": 1,
+    "colorSpace": "srgb",
+    "exporter": {
+      "name": "image sequence",
+      "options": {
+        "fileType": "image/png",
+        "quality": 100,
+        "groupByScene": false
+      }
+    }
+  }
+}
