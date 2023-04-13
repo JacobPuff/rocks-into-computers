@@ -14,8 +14,6 @@ export interface NotGateProps extends NodeProps {
   
 export class NotGate extends Node {
     // implementation
-    private readonly notCircle = createRef<Circle>();
-    private readonly notPolygon = createRef<Polygon>();
     @initial(false)
     @signal()
     public declare inputA: SimpleSignal<boolean, this>;
@@ -32,7 +30,6 @@ export class NotGate extends Node {
             {/* Test Rect for sizing purposes */}
             {/* <Rect fill="#ffffff" width={120} height={120}/> */}
             <Polygon
-                ref={this.notPolygon}
                 fill={colors.GATE_COLOR}
                 y={20}
                 size={120}
@@ -42,9 +39,8 @@ export class NotGate extends Node {
                 lineJoin="round"
             />
             <Circle
-                ref={this.notCircle}
                 stroke={()=>this.output() ? colors.POWERED_COLOR:colors.OFF_COLOR}
-                size={20}
+                size={sizes.NOT_CIRCLE_SIZE}
                 y={-45}
                 fill={colors.GATE_COLOR}
                 lineWidth={sizes.WIRE_WIDTH}
