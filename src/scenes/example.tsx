@@ -1,6 +1,7 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
+import { AndGate } from '../basics/and';
 import { Wire } from '../basics/wire';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
 import {BACKGROUND_COLOR} from '../globalColors'
@@ -10,21 +11,82 @@ import { createSignal } from '@motion-canvas/core/lib/signals';
 import { Txt } from '@motion-canvas/2d/lib/components';
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
-  const secondNot = createRef<NotGate>();
+  const andGate = createRef<AndGate>();
   const wires: Wire[] = [];
-  const input = createSignal(true)
+  const firstInput = createSignal(true)
+  const secondInput = createSignal(true)
+
+  const testXOffset = -100;
+  const testYOffset = -50;
+
   view.fill(BACKGROUND_COLOR);
   view.add(
     <>
-      <NotGate ref={firstNot} x={0} inputA={input} rotation={90}/>
-      <NotGate ref={secondNot} x={200} y={100} rotation={90} inputA={firstNot().output}/>
+      <NotGate
+        ref={firstNot}
+        x={0+ testXOffset}
+        y={0+ testYOffset}
+        rotation={90}
+        inputA={firstInput}
+      />
+      <AndGate
+        ref={andGate}
+        x={200 + testXOffset}
+        y={100 + testYOffset}
+        rotation={90}
+        inputA={firstNot().output}
+        inputB={secondInput}
+      />
       
-      <Wire ref={makeRef(wires, wires.length)} powered={input} points={[[-120, 100], [-120, -100]]}/>
-      <Wire ref={makeRef(wires, wires.length)} jointStart powered={input} points={[[-120, 0], firstNot().inputPos]}/>
-      <Wire ref={makeRef(wires, wires.length)} powered={firstNot().output} points={[firstNot().outputPos, [100, 0], [100,100], secondNot().inputPos]}/>
-      <Wire ref={makeRef(wires, wires.length)} jointEnd powered={secondNot().output} points={[secondNot().outputPos, [secondNot().outputPos.x+50,100]]}/>
+      <Wire
+        ref={makeRef(wires, wires.length)}
+        powered={firstInput}
+        points={[
+          [-120 + testXOffset, 100 + testYOffset],
+          [-120 + testXOffset, -100 + testYOffset]]}
+      />
+      <Wire
+        ref={makeRef(wires, wires.length)}
+        jointStart
+        powered={firstInput}
+        points={[
+          [-120+testXOffset, 0 + testYOffset],
+          firstNot().inputPos
+        ]}
+      />
+
+      <Wire
+        ref={makeRef(wires, wires.length)}
+        powered={firstNot().output}
+        points={[
+          firstNot().outputPos,
+          [100 + testXOffset, 0 + testYOffset],
+          [100 + testXOffset,andGate().inputAPos.y],
+          andGate().inputAPos
+        ]}
+      />
+      <Wire
+        ref={makeRef(wires, wires.length)}
+        powered={secondInput}
+        points={[
+          [100 + testXOffset, 200 + testYOffset],
+          [100 + testXOffset,andGate().inputBPos.y],
+          [100 + testXOffset,andGate().inputBPos.y],
+          andGate().inputBPos
+        ]}
+      />
+
+      <Wire
+        ref={makeRef(wires, wires.length)}
+        jointEnd
+        powered={andGate().output}
+        points={[
+          andGate().outputPos,
+          [andGate().outputPos.x+50,100 + testYOffset]
+        ]}/>
     </>
   );
+  // Reversed so the typical heirarchy is consistent between wires. Defined first means on bottom.
   wires.reverse().forEach(v => v.moveToBottom());
 
   const bgAnimateWires = yield loop(10000, function* (){
@@ -33,9 +95,14 @@ export default makeScene2D(function* (view) {
   const flipBit = yield loop(10000, function* (){
     
     yield* waitFor(2)
-    input(!input())
+    firstInput(!firstInput())
+    yield* waitFor(2)
+    secondInput(!secondInput())
+    yield* waitFor(2)
+    firstInput(!firstInput())
+    secondInput(!secondInput())
   })
-  yield* waitFor(4)
+  yield* waitFor(12)
   yield* beginSlide("title");
   cancel(bgAnimateWires);
   cancel(flipBit);
