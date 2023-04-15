@@ -3,6 +3,7 @@ import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { AndGate } from '../basics/and';
 import { OrGate } from '../basics/or';
+import { XorGate } from '../basics/xor';
 import { Wire } from '../basics/wire';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
 import {BACKGROUND_COLOR} from '../globalColors'
@@ -12,7 +13,7 @@ import { createSignal } from '@motion-canvas/core/lib/signals';
 import { Txt } from '@motion-canvas/2d/lib/components';
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
-  const orGate = createRef<OrGate>();
+  const xorGate = createRef<XorGate>();
   const andGate = createRef<AndGate>();
   const wires: Wire[] = [];
   const firstInput = createSignal(true)
@@ -31,12 +32,12 @@ export default makeScene2D(function* (view) {
         rotation={90}
         inputA={firstInput}
       />
-      <OrGate
-        ref={orGate}
+      <XorGate
+        ref={xorGate}
         x={170 + testXOffset}
         y={100 + testYOffset}
         rotation={90}
-        isNOR={false}
+        isXNOR={false}
         inputA={firstInput}
         inputB={secondInput}
       />
@@ -47,7 +48,7 @@ export default makeScene2D(function* (view) {
         rotation={90}
         isNAND={false}
         inputA={firstNot().output}
-        inputB={orGate().output}
+        inputB={xorGate().output}
       />
       
       {/* firstInput base wire */}
@@ -74,9 +75,9 @@ export default makeScene2D(function* (view) {
         powered={firstInput}
         jointStart
         points={[
-          [-120 + testXOffset,orGate().inputAPos.y],
-          [100 + testXOffset,orGate().inputAPos.y],
-          orGate().inputAPos
+          [-120 + testXOffset,xorGate().inputAPos.y],
+          [100 + testXOffset,xorGate().inputAPos.y],
+          xorGate().inputAPos
         ]}
       />
 
@@ -86,9 +87,9 @@ export default makeScene2D(function* (view) {
         powered={secondInput}
         points={[
           [70 + testXOffset, 200 + testYOffset],
-          [70 + testXOffset,orGate().inputBPos.y],
-          [70 + testXOffset,orGate().inputBPos.y],
-          orGate().inputBPos
+          [70 + testXOffset,xorGate().inputBPos.y],
+          [70 + testXOffset,xorGate().inputBPos.y],
+          xorGate().inputBPos
         ]}
       />
 
@@ -106,10 +107,10 @@ export default makeScene2D(function* (view) {
       />
       <Wire
         ref={makeRef(wires, wires.length)}
-        powered={orGate().output}
+        powered={xorGate().output}
         points={[
-          orGate().outputPos,
-          [250 + testXOffset,  orGate().outputPos.y],
+          xorGate().outputPos,
+          [250 + testXOffset,  xorGate().outputPos.y],
           [250 + testXOffset, andGate().inputBPos.y],
           andGate().inputBPos
         ]}
