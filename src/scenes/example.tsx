@@ -167,7 +167,7 @@ export default makeScene2D(function* (view) {
 TODO:
 Then the rest of the gates [check]
 Visual input signals that aren't the truth table
-Truth table
+Truth table [check]
 I believe the control flow at this point might be truth table > basic inputs > chaining through outputs
 Truth table could later hold assembly commands? Will we get that far in the presentation?
 */
