@@ -13,6 +13,8 @@ import {BACKGROUND_COLOR} from '../globalColors'
 import { loop } from '@motion-canvas/core/lib/flow';
 import { cancel } from '@motion-canvas/core/lib/threading';
 import { createSignal } from '@motion-canvas/core/lib/signals';
+import * as colors from '../globalColors' 
+import * as sizes from '../globalSizes' 
 
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
@@ -150,7 +152,7 @@ export default makeScene2D(function* (view) {
   })
   const bgSelectRows = yield loop(10000, function* (){
     let nextRow = (truthTable().currentOutputLine()+1) % truthTable().columnData().length
-    yield* truthTable().select(nextRow, 0.5)
+    yield* truthTable().select(nextRow, sizes.TRUTH_TABLE_DEFAULT_SPEED)
     yield* waitFor(1)
   })
 
