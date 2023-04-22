@@ -13,9 +13,6 @@ import {BACKGROUND_COLOR} from '../globalColors'
 import { loop } from '@motion-canvas/core/lib/flow';
 import { cancel } from '@motion-canvas/core/lib/threading';
 import { createSignal } from '@motion-canvas/core/lib/signals';
-import { fadeTransition } from '@motion-canvas/core/lib/transitions';
-import {Direction} from '@motion-canvas/core/lib/types';
-import '../global.css'; // <- import the css
 
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
