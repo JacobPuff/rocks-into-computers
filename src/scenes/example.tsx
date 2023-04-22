@@ -1,30 +1,48 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
+import {Circle, NodeProps, Node, Txt, Spline, Rect, Knot, Layout} from '@motion-canvas/2d/lib/components';
+import { range, useLogger } from '@motion-canvas/core/lib/utils';
 import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { AndGate } from '../basics/and';
 import { OrGate } from '../basics/or';
 import { XorGate } from '../basics/xor';
 import { Wire } from '../basics/wire';
+import { TruthTable } from '../basics/truthtable';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
 import {BACKGROUND_COLOR} from '../globalColors'
 import { loop } from '@motion-canvas/core/lib/flow';
 import { cancel } from '@motion-canvas/core/lib/threading';
 import { createSignal } from '@motion-canvas/core/lib/signals';
-import { Txt } from '@motion-canvas/2d/lib/components';
+import { fadeTransition } from '@motion-canvas/core/lib/transitions';
+import {Direction} from '@motion-canvas/core/lib/types';
+import '../global.css'; // <- import the css
+
 export default makeScene2D(function* (view) {
   const firstNot = createRef<NotGate>();
   const xorGate = createRef<XorGate>();
   const andGate = createRef<AndGate>();
+  const truthTable = createRef<TruthTable>();
   const wires: Wire[] = [];
-  const firstInput = createSignal(true)
-  const secondInput = createSignal(true)
+  const firstInput = createSignal(()=>truthTable().outputRow()[0] == 1)
+  const secondInput = createSignal(()=>truthTable().outputRow()[1] == 1)
 
-  const testXOffset = -150;
+  const testXOffset = -50;
   const testYOffset = -50;
-
   view.fill(BACKGROUND_COLOR);
   view.add(
     <>
+      <TruthTable
+        ref={truthTable}
+        x={-250+ testXOffset}
+        y={-50+ testYOffset}
+        columnNames={["A", "B", "Output"]}
+        columnData={[
+          [0,0,0],
+          [1,1,0],
+          [1,0,0],
+          [0,1,1],
+        ]}
+      />
       <NotGate
         ref={firstNot}
         x={0+ testXOffset}
@@ -133,27 +151,22 @@ export default makeScene2D(function* (view) {
   const bgAnimateWires = yield loop(10000, function* (){
     yield* all(...wires.map(w=>w.animate()))
   })
-  const flipBit = yield loop(10000, function* (){
-    
-    yield* waitFor(2)
-    firstInput(!firstInput())
-    yield* waitFor(2)
-    secondInput(!secondInput())
-    yield* waitFor(2)
-    firstInput(!firstInput())
-    yield* waitFor(2)
-    secondInput(!secondInput())
+  const bgSelectRows = yield loop(10000, function* (){
+    let nextRow = (truthTable().currentOutputLine()+1) % truthTable().columnData().length
+    yield* truthTable().select(nextRow, 0.5)
+    yield* waitFor(1)
   })
+
   yield* waitFor(12)
   yield* beginSlide("title");
   cancel(bgAnimateWires);
-  cancel(flipBit);
+  cancel(bgSelectRows);
 });
 
 
 /*
 TODO:
-Then the rest of the gates
+Then the rest of the gates [check]
 Visual input signals that aren't the truth table
 Truth table
 I believe the control flow at this point might be truth table > basic inputs > chaining through outputs
