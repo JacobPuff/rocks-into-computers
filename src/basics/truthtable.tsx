@@ -25,7 +25,7 @@ export class TruthTable extends Node {
     private table = createRef<Layout>();
     private selector = createRef<Rect>();
 
-    private readonly cellHeight = 25
+    private readonly cellHeight = 40
     private makeCell = function(yPos: number, data: any):Node {
         return (
             <Rect
@@ -40,7 +40,7 @@ export class TruthTable extends Node {
             >
                 <Txt
                     text={data ?? ""}
-                    alignSelf={'end'}
+                    alignSelf={'center'}
                     fill={colors.TRUTH_TABLE_TEXT}
                     fontFamily="Helvetica"
                     fontSize={20}
