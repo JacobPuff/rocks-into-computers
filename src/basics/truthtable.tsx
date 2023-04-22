@@ -32,7 +32,7 @@ export class TruthTable extends Node {
                 padding={[0,10]}
                 y={yPos}
                 height={this.cellHeight}
-                fill={"#cccccc"}
+                fill={colors.TRUTH_TABLE_FILL}
                 stroke={colors.OFF_COLOR}
                 lineWidth={sizes.TRUTH_TABLE_BORDER_WIDTH}
                 layout
@@ -40,8 +40,8 @@ export class TruthTable extends Node {
             >
                 <Txt
                     text={data ?? ""}
-                    alignSelf={'center'}
-                    fill={"#444444"}
+                    alignSelf={'end'}
+                    fill={colors.TRUTH_TABLE_TEXT}
                     fontFamily="Helvetica"
                     fontSize={20}
                     fontWeight={700}

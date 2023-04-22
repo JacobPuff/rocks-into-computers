@@ -6,6 +6,7 @@ import { NotGate } from '../basics/not';
 import { AndGate } from '../basics/and';
 import { OrGate } from '../basics/or';
 import { XorGate } from '../basics/xor';
+// import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
@@ -67,6 +68,16 @@ export default makeScene2D(function* (view) {
         inputA={firstNot().output}
         inputB={xorGate().output}
       />
+      {/* <VisualIO
+        position={[-120 + testXOffset, 220 + testYOffset]}
+        powered={firstInput}
+        name={"A"}
+      />
+      <VisualIO
+        position={[70 + testXOffset, 220 + testYOffset]}
+        powered={secondInput}
+        name={"Input B"}
+      /> */}
       
       {/* firstInput base wire */}
       <Wire
