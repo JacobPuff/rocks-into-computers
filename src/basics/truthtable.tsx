@@ -49,7 +49,7 @@ export class TruthTable extends Node {
             </Rect>
         )
     }
-    private getSelectorY = (i:number) => i*this.cellHeight-(this.columnData.length/2*this.cellHeight)
+    private getSelectorY = (i:number) => (i*this.cellHeight-(this.columnData().length*this.cellHeight)/2)+this.cellHeight
 
     public constructor(props?: TruthTableProps) {
         super({
