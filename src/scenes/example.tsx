@@ -6,7 +6,7 @@ import { NotGate } from '../basics/not';
 import { AndGate } from '../basics/and';
 import { OrGate } from '../basics/or';
 import { XorGate } from '../basics/xor';
-// import { VisualIO } from '../basics/visualIO';
+import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
@@ -26,7 +26,7 @@ export default makeScene2D(function* (view) {
   const firstInput = createSignal(()=>truthTable().outputRow()[0] == 1)
   const secondInput = createSignal(()=>truthTable().outputRow()[1] == 1)
 
-  const testXOffset = -50;
+  const testXOffset = -110;
   const testYOffset = -50;
   view.fill(BACKGROUND_COLOR);
   view.add(
@@ -68,7 +68,7 @@ export default makeScene2D(function* (view) {
         inputA={firstNot().output}
         inputB={xorGate().output}
       />
-      {/* <VisualIO
+      <VisualIO
         position={[-120 + testXOffset, 220 + testYOffset]}
         powered={firstInput}
         name={"A"}
@@ -76,8 +76,13 @@ export default makeScene2D(function* (view) {
       <VisualIO
         position={[70 + testXOffset, 220 + testYOffset]}
         powered={secondInput}
-        name={"Input B"}
-      /> */}
+        name={"B"}
+      />
+      <VisualIO
+        position={[andGate().outputPos.x+120,andGate().outputPos.y]}
+        powered={andGate().output}
+        name={"Output"}
+      />
       
       {/* firstInput base wire */}
       <Wire
@@ -85,7 +90,7 @@ export default makeScene2D(function* (view) {
         powered={firstInput}
         points={[
           [-120 + testXOffset, 200 + testYOffset],
-          [-120 + testXOffset, -100 + testYOffset]]}
+          [-120 + testXOffset, 0 + testYOffset]]}
       />
       {/* firstInput base wire, NOT gate input */}
       <Wire
@@ -146,11 +151,10 @@ export default makeScene2D(function* (view) {
       {/* AND gate output */}
       <Wire
         ref={makeRef(wires, wires.length)}
-        jointEnd
         powered={andGate().output}
         points={[
           andGate().outputPos,
-          [andGate().outputPos.x+50,andGate().outputPos.y]
+          [andGate().outputPos.x+70,andGate().outputPos.y]
         ]}
       />
     </>
@@ -161,13 +165,14 @@ export default makeScene2D(function* (view) {
   const bgAnimateWires = yield loop(10000, function* (){
     yield* all(...wires.map(w=>w.animate()))
   })
+  yield* waitFor(1)
   const bgSelectRows = yield loop(10000, function* (){
     let nextRow = (truthTable().currentOutputLine()+1) % truthTable().columnData().length
     yield* truthTable().select(nextRow, sizes.TRUTH_TABLE_DEFAULT_SPEED)
     yield* waitFor(1)
   })
 
-  yield* waitFor(12)
+  yield* waitFor(11)
   yield* beginSlide("title");
   cancel(bgAnimateWires);
   cancel(bgSelectRows);
@@ -177,7 +182,7 @@ export default makeScene2D(function* (view) {
 /*
 TODO:
 Then the rest of the gates [check]
-Visual input signals that aren't the truth table
+Visual input signals that aren't the truth table [check]
 Truth table [check]
 I believe the control flow at this point might be truth table > basic inputs > chaining through outputs
 Truth table could later hold assembly commands? Will we get that far in the presentation?
