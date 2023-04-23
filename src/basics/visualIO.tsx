@@ -31,7 +31,7 @@ export class VisualIO extends Node {
                 <Rect
                     minHeight={sizes.VISUAL_IO_SIZE}
                     minWidth={sizes.VISUAL_IO_SIZE}
-                    padding={[0,10]}
+                    padding={[0,15]}
                     radius={50}
                     stroke={()=>this.powered() ? colors.POWERED_COLOR:colors.VISUAL_IO_OFF_BORDER}
                     fill={()=>this.powered() ? colors.POWERED_COLOR:colors.OFF_COLOR}
