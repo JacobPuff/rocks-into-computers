@@ -26,7 +26,7 @@ export default makeScene2D(function* (view) {
         <Txt
             position={[0,-300]}
             fontSize={50}
-            fontWeight={700}
+            fontWeight={sizes.DEFAULT_FONT_WEIGHT}
             fill={colors.TEXT_COLOR}
             fontFamily="Helvetica"
             text={"The NOT Gate"}
@@ -83,11 +83,11 @@ export default makeScene2D(function* (view) {
     yield* all(...wires.map(w=>w.animate()))
   })
   yield* slideTransition(Direction.Right, 1);
-
+  waitFor(0.5)
   const bgSelectRows = yield loop(10000, function* (){
-    yield* waitFor(1)
     let nextRow = (truthTable().currentOutputLine()+1) % truthTable().columnData().length
     yield* truthTable().select(nextRow, sizes.TRUTH_TABLE_DEFAULT_SPEED)
+    yield* waitFor(1)
     
   })
   yield* beginSlide("not gate");

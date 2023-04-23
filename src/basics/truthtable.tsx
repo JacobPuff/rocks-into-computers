@@ -44,7 +44,7 @@ export class TruthTable extends Node {
                     fill={colors.TRUTH_TABLE_TEXT}
                     fontFamily="Helvetica"
                     fontSize={30}
-                    fontWeight={700}
+                    fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 />
             </Rect>
         )

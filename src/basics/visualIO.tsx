@@ -44,7 +44,7 @@ export class VisualIO extends Node {
                         fill={()=>this.powered() ? colors.OFF_COLOR :colors.TEXT_COLOR}
                         fontFamily="Helvetica"
                         fontSize={sizes.VISUAL_IO_TEXT_SIZE}
-                        fontWeight={700}
+                        fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                         alignSelf={'center'}
                     />
                 </Rect>

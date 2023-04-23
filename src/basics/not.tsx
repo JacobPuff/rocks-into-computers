@@ -48,7 +48,7 @@ export class NotGate extends Node {
                 fill={colors.TEXT_COLOR}
                 fontFamily="Helvetica"
                 fontSize={20}
-                fontWeight={700}
+                fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 y={25}
             />
             </>
