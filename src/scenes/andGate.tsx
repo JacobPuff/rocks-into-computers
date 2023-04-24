@@ -193,7 +193,7 @@ export default makeScene2D(function* (view) {
   })
   yield* beginSlide("and gate");
   yield* all(
-      slideTitle().text("The NAND Gate", 0.5),
+      slideTitle().text("The NAND Gate", 1),
       andUnit().position.x(-300, 1),
       nandUnit().opacity(1, 1),
   )
