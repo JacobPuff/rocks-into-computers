@@ -81,7 +81,7 @@ export class TruthTable extends Node {
                     ref={this.selector}
                     radius={5}
                     position={()=>[0,this.getSelectorY(this.currentOutputLine())]}
-                    width={this.table().width()+5} 
+                    width={()=>this.table().width()+5} 
                     height={this.cellHeight+5}
                     stroke={colors.POWERED_COLOR}
                     lineWidth={sizes.TRUTH_TABLE_BORDER_WIDTH}
