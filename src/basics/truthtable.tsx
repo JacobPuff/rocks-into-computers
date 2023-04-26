@@ -64,21 +64,23 @@ export class TruthTable extends Node {
                     direction="row"
                     gap={0}
                     layout
-                >
-                    {range(this.columnNames().length).flatMap((i) =>
-                        <Layout direction="column" gap={0} layout>
-                            {this.makeCell(0, this.columnNames()[i])}
-                            {range(this.columnData().length).flatMap((row) =>
-                                this.makeCell(this.cellHeight*(i+1), this.columnData()[row][i])
-                            )}
-                        </Layout>
+                    spawner={()=>
+                        range(this.columnNames().length).flatMap((i) =>
+                        <Layout direction="column" gap={0} layout
+                            spawner={()=>
+                                [this.makeCell(0, this.columnNames()[i]),
+                                ...range(this.columnData().length).flatMap((row) =>
+                                        this.makeCell(this.cellHeight*(i+1), this.columnData()[row][i])
+                                )]
+                            }
+                        />
                     )}
-                </Layout>
+                />
                 
                 <Rect
                     ref={this.selector}
                     radius={5}
-                    position={[0,this.getSelectorY(this.currentOutputLine())]}
+                    position={()=>[0,this.getSelectorY(this.currentOutputLine())]}
                     width={this.table().width()+5} 
                     height={this.cellHeight+5}
                     stroke={colors.POWERED_COLOR}
