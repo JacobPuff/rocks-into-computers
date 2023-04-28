@@ -26,8 +26,9 @@ export default makeScene2D(function* (view) {
     const halfAdderLayout = createRef<Layout>();
     const xorWires = createRef<Layout>();
     const andWires = createRef<Layout>();
-    const inputA = createSignal(()=>truthTables[0].outputRow()[0] == 1)
-    const inputB = createSignal(()=>truthTables[0].outputRow()[1] == 1)
+    let currentTable = 0
+    const inputA = createSignal(()=>truthTables[currentTable].outputRow()[0] == 1)
+    const inputB = createSignal(()=>truthTables[currentTable].outputRow()[1] == 1)
     const wires: Wire[] = [];
     const AInputBreakY = 230
     const BInputBreakY = 190
@@ -52,6 +53,18 @@ export default makeScene2D(function* (view) {
                     [0,0,0],
                     [1,0,1],
                     [0,1,1],
+                ]}
+            />
+            <TruthTable
+                ref={makeRef(truthTables, truthTables.length)}
+                opacity={0}
+                position={[-400,0]}
+                columnNames={["A", "B", "Sum", "Carry"]}
+                columnData={[
+                    [0,0,0,0],
+                    [1,0,1,0],
+                    [0,1,1,0],
+                    [1,1,0,1],
                 ]}
             />
             <Layout ref={internalsLayout} opacity={1}>
@@ -233,7 +246,8 @@ export default makeScene2D(function* (view) {
     let bgSelectRows = yield loop(10000, function* (){
         yield* all (
             ...truthTables.map(table=>{
-                let nextRow = (table.currentOutputLine()+1) % table.columnData().length
+                // Used this way to sync the two tables selectors so the inputs don't jitter.
+                let nextRow = (truthTables[currentTable].currentOutputLine()+1) % truthTables[currentTable].columnData().length
                 return table.select(nextRow, sizes.TRUTH_TABLE_DEFAULT_SPEED)
             })
         )
@@ -246,28 +260,12 @@ export default makeScene2D(function* (view) {
         xorGate().opacity(1,1),
     )
     yield* beginSlide("add two bits xor");
-    /*
-    I don't like the input interuption. So I'll probably go back to adding the table using truthtable[0]
-    to sync the selected states, and then swapping truthtable[0] and [1]. But for tonight I'm making a commit.
-    */
-    view.add(
-        <TruthTable
-            ref={makeRef(truthTables, truthTables.length)}
-            opacity={0}
-            position={[-400,0]}
-            columnNames={["A", "B", "Sum", "Carry"]}
-            columnData={[
-                [0,0,0,0],
-                [1,1,1,0],
-                [1,1,1,0],
-                [1,1,0,1],
-            ]}
-        />)
     inputA(()=>truthTables[1].outputRow()[0] == 1)
     inputB(()=>truthTables[1].outputRow()[1] == 1)
     yield* truthTables[0].opacity(0,0.5),
     yield* truthTables[1].opacity(1,0.5),
     truthTables[0].remove()
+    currentTable = 1
 
     yield* beginSlide("updated truthtable");
     yield* all(
