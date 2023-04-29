@@ -43,7 +43,7 @@ export default makeScene2D(function* (view) {
                 fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 fill={colors.TEXT_COLOR}
                 fontFamily="Helvetica"
-                text={"Adding Numbers"}
+                text={"Adding Two Bits"}
             />
             <TruthTable
                 ref={makeRef(truthTables, truthTables.length)}
@@ -277,6 +277,7 @@ export default makeScene2D(function* (view) {
         internalsLayout().scale(0,2),
         internalsLayout().opacity(0,1),
         delay(0.7,halfAdderLayout().opacity(1,1)),
+        delay(0.7,slideTitle().text("Half Adder",1)),
     )
     yield* beginSlide("scaled down circuit, reveal HalfAdder");
     cancel(bgAnimateWires);
