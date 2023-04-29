@@ -21,8 +21,8 @@ export class HalfAdder extends Node {
     public declare inputB: SimpleSignal<boolean, this>;
     public sum: SimpleSignal<boolean, this> = createSignal(() => this.inputA() != this.inputB());
     public carry: SimpleSignal<boolean, this> = createSignal(() => this.inputA() && this.inputB());
-    public readonly inputAPos: Vector2 = new Vector2(-50,50).transformAsPoint(this.localToWorld());
-    public readonly inputBPos: Vector2 = new Vector2(50,50).transformAsPoint(this.localToWorld());
+    public readonly inputAPos: Vector2 = new Vector2(-50,45).transformAsPoint(this.localToWorld());
+    public readonly inputBPos: Vector2 = new Vector2(50,45).transformAsPoint(this.localToWorld());
     public readonly sumPos: Vector2 =  new Vector2(50,-35).transformAsPoint(this.localToWorld());
     public readonly carryPos: Vector2 =  new Vector2(-50,-35).transformAsPoint(this.localToWorld());
 
