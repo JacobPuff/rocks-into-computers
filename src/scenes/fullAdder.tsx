@@ -1,13 +1,13 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef, useLogger} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
 import { OrGate } from '../basics/or';
 import { HalfAdder } from '../circuits/halfAdder';
 import { FullAdder } from '../circuits/fullAdder';
-import {all, waitFor} from '@motion-canvas/core/lib/flow';
+import {all, any, waitFor} from '@motion-canvas/core/lib/flow';
 import {slideTransition} from '@motion-canvas/core/lib/transitions';
 import {Direction, Vector2} from '@motion-canvas/core/lib/types';
 import { loop, delay } from '@motion-canvas/core/lib/flow';
@@ -25,14 +25,104 @@ export default makeScene2D(function* (view) {
     const internalsLayout = createRef<Layout>();
     const secondHalfAdderWires = createRef<Layout>();
     const orCarryOutWires = createRef<Layout>();
-    const superInts = "¹²³⁴⁵⁶⁷⁸"
-    
     const fullAdderWires = createRef<Layout>();
-    const fullAdder = createRef<FullAdder>();
+    const rippleAdderLayout = createRef<Layout>();
+    const superInts = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+    
     const inputA = createSignal(()=>truthTables[0].outputRow()[0] == 1)
     const inputB = createSignal(()=>truthTables[0].outputRow()[1] == 1)
     const carryIn = createSignal(()=>truthTables[0].outputRow()[2] == 1)
+    const rippleSpacing = 200
     const wires: Wire[] = [];
+
+    const rippleSize = 8
+    const rippleAdders: FullAdder[] = []
+    range(rippleSize).forEach(n=> (
+        rippleAdders.push(
+            <FullAdder
+                position={[n*-rippleSpacing,0]}
+                inputA={inputA}
+                inputB={inputB}
+                carryIn={rippleAdders[n-1]?.carryOut || carryIn}
+                opacity={0}
+            />
+        )
+    ))
+    const fullAdder = rippleAdders[0]
+    const rippleWires: Layout[] = rippleAdders.map((rippleAdder,i)=>(
+        <Layout opacity={0}>
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={inputA}
+                points={[
+                    [rippleAdder.inputAPos.x,150],
+                    rippleAdder.inputAPos,
+                ]}
+            />
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={inputB}
+                points={[
+                    [rippleAdder.inputBPos.x,150],
+                    rippleAdder.inputBPos,
+                ]}
+            />
+            {/* <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={carryIn}
+                points={[
+                    [rippleAdder.carryInPos.x+100,rippleAdder.carryInPos.y],
+                    rippleAdder.carryInPos,
+                ]}
+            /> */}
+            {(i!=rippleSize-1) && (
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={rippleAdder.carryOut}
+                points={[
+                    rippleAdder.carryOutPos,
+                    [rippleAdder.carryOutPos.x,rippleAdder.carryOutPos.y-20],
+                    [rippleAdder.position.x()-rippleSpacing/2,rippleAdder.carryOutPos.y-20],
+                    [rippleAdder.position.x()-rippleSpacing/2,rippleAdders[i+1].carryInPos.y],
+                    rippleAdders[i+1].carryInPos
+                ]}
+            />)}
+            
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={rippleAdder.sum}
+                points={[
+                    rippleAdder.sumPos,
+                    [rippleAdder.sumPos.x,rippleAdder.sumPos.y-90]
+                ]}
+            />
+            <VisualIO
+                name={"A"+superInts[i+1]}
+                powered={inputA}
+                position={[rippleAdder.inputAPos.x,150]}
+            />
+            <VisualIO
+                name={"B"+superInts[i+1]}
+                powered={inputB}
+                position={[rippleAdder.inputBPos.x,150]}
+            />
+            {/* <VisualIO
+                name={"Cᶦⁿ"}
+                powered={carryIn}
+                position={[rippleAdder.carryInPos.x+100,rippleAdder.carryInPos.y]}
+            /> */}
+            {/* <VisualIO
+                name={"Cᵒᵘᵗ"}
+                powered={rippleAdder.carryOut}
+                position={[rippleAdder.carryOutPos.x,rippleAdder.carryOutPos.y-90]}
+            /> */}
+            <VisualIO
+                name={"S"+superInts[i+1]}
+                powered={rippleAdder.sum}
+                position={[rippleAdder.sumPos.x,rippleAdder.sumPos.y-90]}
+            />
+        </Layout>
+    ))
 
     view.fill(colors.BACKGROUND_COLOR);
     view.add(
@@ -189,85 +279,83 @@ export default makeScene2D(function* (view) {
                     /> 
                 </Layout>
             </Layout>
-            
-            <FullAdder
-                ref={fullAdder}
-                inputA={inputA}
-                inputB={inputB}
-                carryIn={carryIn}
-                opacity={0}
-            />
+
+            <Layout ref={rippleAdderLayout}>
+                {...rippleAdders}
+                {...rippleWires}
+            </Layout>
             <Layout ref={fullAdderWires} opacity={0}>
                 <Wire
                     ref={makeRef(wires, wires.length)}
                     powered={inputA}
                     points={[
-                        [fullAdder().inputAPos.x,150],
-                        fullAdder().inputAPos,
+                        [fullAdder.inputAPos.x,150],
+                        fullAdder.inputAPos,
                     ]}
                 />
                 <Wire
                     ref={makeRef(wires, wires.length)}
                     powered={inputB}
                     points={[
-                        [fullAdder().inputBPos.x,150],
-                        fullAdder().inputBPos,
+                        [fullAdder.inputBPos.x,150],
+                        fullAdder.inputBPos,
                     ]}
                 />
                 <Wire
                     ref={makeRef(wires, wires.length)}
                     powered={carryIn}
                     points={[
-                        [fullAdder().carryInPos.x+100,fullAdder().carryInPos.y],
-                        fullAdder().carryInPos,
+                        [fullAdder.carryInPos.x+100,fullAdder.carryInPos.y],
+                        fullAdder.carryInPos,
                     ]}
                 />
                 <Wire
                     ref={makeRef(wires, wires.length)}
-                    powered={fullAdder().carryOut}
+                    powered={fullAdder.carryOut}
                     points={[
-                        fullAdder().carryOutPos,
-                        [fullAdder().carryOutPos.x,fullAdder().carryOutPos.y-90]
+                        fullAdder.carryOutPos,
+                        [fullAdder.carryOutPos.x,fullAdder.carryOutPos.y-90]
                     ]}
                 />
                 <Wire
                     ref={makeRef(wires, wires.length)}
-                    powered={fullAdder().sum}
+                    powered={fullAdder.sum}
                     points={[
-                        fullAdder().sumPos,
-                        [fullAdder().sumPos.x,fullAdder().sumPos.y-90]
+                        fullAdder.sumPos,
+                        [fullAdder.sumPos.x,fullAdder.sumPos.y-90]
                     ]}
                 />
                 <VisualIO
                     name={"A¹"}
                     powered={inputA}
-                    position={[fullAdder().inputAPos.x,150]}
+                    position={[fullAdder.inputAPos.x,150]}
                 />
                 <VisualIO
                     name={"B¹"}
                     powered={inputB}
-                    position={[fullAdder().inputBPos.x,150]}
+                    position={[fullAdder.inputBPos.x,150]}
                 />
                 <VisualIO
                     name={"Cᶦⁿ"}
                     powered={carryIn}
-                    position={[fullAdder().carryInPos.x+100,fullAdder().carryInPos.y]}
+                    position={[fullAdder.carryInPos.x+100,fullAdder.carryInPos.y]}
                 />
                 <VisualIO
                     name={"Cᵒᵘᵗ"}
-                    powered={fullAdder().carryOut}
-                    position={[fullAdder().carryOutPos.x,fullAdder().carryOutPos.y-90]}
+                    powered={fullAdder.carryOut}
+                    position={[fullAdder.carryOutPos.x,fullAdder.carryOutPos.y-90]}
                 />
                 <VisualIO
                     name={"Sum"}
-                    powered={fullAdder().sum}
-                    position={[fullAdder().sumPos.x,fullAdder().sumPos.y-90]}
+                    powered={fullAdder.sum}
+                    position={[fullAdder.sumPos.x,fullAdder.sumPos.y-90]}
                 />
             </Layout>
         </>
     );
     // Reversed so the typical heirarchy is consistent between wires. Defined first means on bottom.
     wires.reverse().forEach(v => v.moveToBottom());
+    rippleWires.forEach(v=>v.moveToBottom())
     secondHalfAdderWires().moveToBottom();
     orCarryOutWires().moveToBottom();
     fullAdderWires().moveToBottom();
@@ -277,7 +365,7 @@ export default makeScene2D(function* (view) {
     })
     yield* slideTransition(Direction.Right, 1);
     waitFor(0.5)
-    let bgSelectRows = yield loop(10000, function* (){
+    const bgSelectRows = yield loop(10000, function* (){
         yield* all (
             ...truthTables.map(table=>{
                 let nextRow = (table.currentOutputLine()+1) % table.columnData().length
@@ -302,10 +390,28 @@ export default makeScene2D(function* (view) {
         internalsLayout().scale(0,2),
         internalsLayout().opacity(0,1),
         delay(0.7,fullAdderWires().opacity(1,1)),
-        delay(0.7,fullAdder().opacity(1,1)),
+        delay(0.7,fullAdder.opacity(1,1)),
         delay(0.7,slideTitle().text("Full Adder",1)),
     )
     yield* beginSlide("scaled down circuit, reveal FullAdder");
+    yield* all(
+        truthTables[0].opacity(0,0.5),
+        fullAdderWires().opacity(0,0.5),
+    )
+    inputA(false)
+    inputB(false)
+    carryIn(false)
+    yield* rippleAdderLayout().position.y(200, 1)
+
+    const rippleDelay = 0.2
+    yield* all(
+        // rippleAdderLayout().scale(0.5, 1),
+        rippleAdderLayout().position.x(rippleSize*rippleSpacing/2-rippleSpacing/2, rippleDelay*(rippleSize-1)),
+        ...rippleWires.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
+        ...rippleAdders.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
+        delay(0.7,slideTitle().text("Ripple Adder",1)),
+    )
+    yield* beginSlide("ripple adder")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
