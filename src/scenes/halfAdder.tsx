@@ -243,7 +243,7 @@ export default makeScene2D(function* (view) {
     })
     yield* slideTransition(Direction.Right, 1);
     waitFor(0.5)
-    let bgSelectRows = yield loop(10000, function* (){
+    const bgSelectRows = yield loop(10000, function* (){
         yield* all (
             ...truthTables.map(table=>{
                 // Used this way to sync the two tables selectors so the inputs don't jitter.
@@ -280,6 +280,7 @@ export default makeScene2D(function* (view) {
         delay(0.7,slideTitle().text("Half Adder",1)),
     )
     yield* beginSlide("scaled down circuit, reveal HalfAdder");
+    yield* beginSlide("Reveal ripple adder")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
