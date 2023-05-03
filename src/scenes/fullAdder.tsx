@@ -67,14 +67,6 @@ export default makeScene2D(function* (view) {
                     rippleAdder.inputBPos,
                 ]}
             />
-            {/* <Wire
-                ref={makeRef(wires, wires.length)}
-                powered={carryIn}
-                points={[
-                    [rippleAdder.carryInPos.x+100,rippleAdder.carryInPos.y],
-                    rippleAdder.carryInPos,
-                ]}
-            /> */}
             {(i!=rippleSize-1) && (
             <Wire
                 ref={makeRef(wires, wires.length)}
@@ -85,6 +77,15 @@ export default makeScene2D(function* (view) {
                     [rippleAdder.position.x()-rippleSpacing/2,rippleAdder.carryOutPos.y-20],
                     [rippleAdder.position.x()-rippleSpacing/2,rippleAdders[i+1].carryInPos.y],
                     rippleAdders[i+1].carryInPos
+                ]}
+            />)}
+            {(i==rippleSize-1) && (
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={rippleAdder.carryOut}
+                points={[
+                    rippleAdder.carryOutPos,
+                    [rippleAdder.carryOutPos.x,rippleAdder.carryOutPos.y-90],
                 ]}
             />)}
             
@@ -106,16 +107,13 @@ export default makeScene2D(function* (view) {
                 powered={inputB}
                 position={[rippleAdder.inputBPos.x,150]}
             />
-            {/* <VisualIO
-                name={"Cᶦⁿ"}
-                powered={carryIn}
-                position={[rippleAdder.carryInPos.x+100,rippleAdder.carryInPos.y]}
-            /> */}
-            {/* <VisualIO
-                name={"Cᵒᵘᵗ"}
+            
+            {(i==rippleSize-1) && (
+            <VisualIO
+                name={"Overflow"}
                 powered={rippleAdder.carryOut}
-                position={[rippleAdder.carryOutPos.x,rippleAdder.carryOutPos.y-90]}
-            /> */}
+                position={[rippleAdder.carryOutPos.x-30,rippleAdder.carryOutPos.y-90]}
+            />)}
             <VisualIO
                 name={"S"+superInts[i+1]}
                 powered={rippleAdder.sum}
@@ -406,7 +404,7 @@ export default makeScene2D(function* (view) {
     const rippleDelay = 0.2
     yield* all(
         // rippleAdderLayout().scale(0.5, 1),
-        rippleAdderLayout().position.x(rippleSize*rippleSpacing/2-rippleSpacing/2, rippleDelay*(rippleSize-1)),
+        rippleAdderLayout().position.x(rippleSize*rippleSpacing/2-rippleSpacing/4, rippleDelay*(rippleSize-1)),
         ...rippleWires.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
         ...rippleAdders.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
         delay(0.7,slideTitle().text("Ripple Adder",1)),
