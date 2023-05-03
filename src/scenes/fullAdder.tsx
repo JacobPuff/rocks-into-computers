@@ -34,16 +34,23 @@ export default makeScene2D(function* (view) {
     const carryIn = createSignal(()=>truthTables[0].outputRow()[2] == 1)
     const rippleSpacing = 200
     const wires: Wire[] = [];
+    
+    const isRippleAdding = createSignal(false)
+    const rippleTable = createSignal(1)
+    const getInput = (bit:number, row: number, table: number) => {
+        if (!isRippleAdding()) return false
+        return truthTables[table].columnData()[row][1][rippleSize-bit-1] == "1"
+    }
 
     const rippleSize = 8
     const rippleAdders: FullAdder[] = []
-    range(rippleSize).forEach(n=> (
+    range(rippleSize).forEach(i=> (
         rippleAdders.push(
             <FullAdder
-                position={[n*-rippleSpacing,0]}
-                inputA={inputA}
-                inputB={inputB}
-                carryIn={rippleAdders[n-1]?.carryOut || carryIn}
+                position={[i*-rippleSpacing,0]}
+                inputA={()=>getInput(i,0,rippleTable())}
+                inputB={()=>getInput(i,1,rippleTable())}
+                carryIn={rippleAdders[i-1]?.carryOut || carryIn}
                 opacity={0}
             />
         )
@@ -53,7 +60,7 @@ export default makeScene2D(function* (view) {
         <Layout opacity={0}>
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={inputA}
+                powered={()=>getInput(i,0,rippleTable())}
                 points={[
                     [rippleAdder.inputAPos.x,150],
                     rippleAdder.inputAPos,
@@ -61,7 +68,7 @@ export default makeScene2D(function* (view) {
             />
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={inputB}
+                powered={()=>getInput(i,1,rippleTable())}
                 points={[
                     [rippleAdder.inputBPos.x,150],
                     rippleAdder.inputBPos,
@@ -99,12 +106,12 @@ export default makeScene2D(function* (view) {
             />
             <VisualIO
                 name={"A"+superInts[i+1]}
-                powered={inputA}
+                powered={()=>getInput(i,0,rippleTable())}
                 position={[rippleAdder.inputAPos.x,150]}
             />
             <VisualIO
                 name={"B"+superInts[i+1]}
-                powered={inputB}
+                powered={()=>getInput(i,1,rippleTable())}
                 position={[rippleAdder.inputBPos.x,150]}
             />
             
@@ -146,6 +153,17 @@ export default makeScene2D(function* (view) {
                     [1,1,0,"_",0,1],
                     [1,0,1,"_",0,1],
                     [1,1,1,"_",1,1],
+                ]}
+            />
+            <TruthTable
+                ref={makeRef(truthTables, truthTables.length)}
+                position={[-400,0]}
+                opacity={0}
+                columnNames={["num","binary"]}
+                columnData={[
+                    ["8","00001001"],
+                    ["5","00000101"],
+                    ["13","00001110"],
                 ]}
             />
             <Layout
@@ -396,8 +414,9 @@ export default makeScene2D(function* (view) {
         truthTables[0].opacity(0,0.5),
         fullAdderWires().opacity(0,0.5),
     )
-    inputA(false)
-    inputB(false)
+    // Set first full adders inputs to big nums
+    inputA(()=>getInput(0,0,rippleTable()))
+    inputB(()=>getInput(0,1,rippleTable()))
     carryIn(false)
     yield* rippleAdderLayout().position.y(200, 1)
 
@@ -409,6 +428,7 @@ export default makeScene2D(function* (view) {
         delay(0.7,slideTitle().text("Ripple Adder",1)),
     )
     yield* beginSlide("ripple adder")
+    isRippleAdding(true)
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
