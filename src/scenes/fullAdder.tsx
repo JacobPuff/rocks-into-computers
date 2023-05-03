@@ -157,17 +157,6 @@ export default makeScene2D(function* (view) {
                     [1,1,1,"_",1,1],
                 ]}
             />
-            <TruthTable
-                ref={makeRef(truthTables, truthTables.length)}
-                position={[-400,0]}
-                opacity={0}
-                columnNames={["num","binary"]}
-                columnData={[
-                    ["8","00001001"],
-                    ["5","00000101"],
-                    ["13","00001110"],
-                ]}
-            />
             <Layout
                 ref={internalsLayout}
                 position={[-30,200]}
@@ -430,7 +419,22 @@ export default makeScene2D(function* (view) {
         delay(0.7,slideTitle().text("Ripple Adder",1)),
     )
     yield* beginSlide("ripple adder")
+    view.add(
+        <TruthTable
+            ref={makeRef(truthTables, truthTables.length)}
+            position={[-700,-150]}
+            opacity={0}
+            columnNames={["num","binary"]}
+            columnData={[
+                ["8","00001001"],
+                ["5","00000101"],
+                ["13","00001110"],
+            ]}
+        />
+    )
+    yield* truthTables[1].opacity(1,0.5)
     isRippleAdding(true)
+    yield* beginSlide("ripple adder start adding")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
