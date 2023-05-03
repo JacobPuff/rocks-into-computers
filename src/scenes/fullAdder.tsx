@@ -137,15 +137,15 @@ export default makeScene2D(function* (view) {
             <TruthTable
                 ref={makeRef(truthTables, truthTables.length)}
                 position={[-400,0]}
-                columnNames={["A¹", "B¹", "Cᶦⁿ", "-", "Sum", "Cᵒᵘᵗ"]}
+                columnNames={["A¹", "B¹", "Cᶦⁿ", "_", "Sum", "Cᵒᵘᵗ"]}
                 columnData={[
-                    [0,0,0,"-",0,0],
-                    [1,0,0,"-",1,0],
-                    [0,1,0,"-",1,0],
-                    [0,0,1,"-",1,0],
-                    [1,1,0,"-",0,1],
-                    [1,0,1,"-",0,1],
-                    [1,1,1,"-",1,1],
+                    [0,0,0,"_",0,0],
+                    [1,0,0,"_",1,0],
+                    [0,1,0,"_",1,0],
+                    [0,0,1,"_",1,0],
+                    [1,1,0,"_",0,1],
+                    [1,0,1,"_",0,1],
+                    [1,1,1,"_",1,1],
                 ]}
             />
             <Layout
@@ -403,7 +403,6 @@ export default makeScene2D(function* (view) {
 
     const rippleDelay = 0.2
     yield* all(
-        // rippleAdderLayout().scale(0.5, 1),
         rippleAdderLayout().position.x(rippleSize*rippleSpacing/2-rippleSpacing/4, rippleDelay*(rippleSize-1)),
         ...rippleWires.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
         ...rippleAdders.map((v,i)=>delay(rippleDelay*(i-1),v.opacity(1,1))),
