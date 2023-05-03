@@ -5,6 +5,7 @@ import { createRef, range } from '@motion-canvas/core/lib/utils';
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
 import { easeInCubic } from '@motion-canvas/core/lib/tweening';
+import { waitFor } from '@motion-canvas/core/lib/flow';
 
 export interface TruthTableProps extends NodeProps {
     // properties
@@ -94,7 +95,11 @@ export class TruthTable extends Node {
         );
     }
     public *select(row: number, duration: number) {
-        yield* this.selector().position.y(this.getSelectorY(row), duration, easeInCubic)
+        if (this.hasSelector()) {
+            yield* this.selector().position.y(this.getSelectorY(row), duration, easeInCubic)
+        } else {
+            yield* waitFor(duration)
+        }
         this.currentOutputLine(row)
     }
 }
