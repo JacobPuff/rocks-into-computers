@@ -10,6 +10,7 @@ export interface TruthTableProps extends NodeProps {
     // properties
     columnNames?: SignalValue<string[]> // This could just be inputs[]
     columnData?: SignalValue<any[][]>
+    hasSelector?: SignalValue<boolean>
   }
   
 export class TruthTable extends Node {
@@ -20,6 +21,9 @@ export class TruthTable extends Node {
     @initial([])
     @signal()
     public declare columnData: SimpleSignal<any[][], this>;
+    @initial(true)
+    @signal()
+    public declare hasSelector: SimpleSignal<any[][], this>;
     public outputRow: SimpleSignal<any[], this> = createSignal(() => this.columnData()[this.currentOutputLine()]);
     public currentOutputLine: SimpleSignal<number, this> = createSignal(0);
     private table = createRef<Layout>();
@@ -77,7 +81,7 @@ export class TruthTable extends Node {
                     )}
                 />
                 
-                <Rect
+                {this.hasSelector() &&<Rect
                     ref={this.selector}
                     radius={5}
                     position={()=>[0,this.getSelectorY(this.currentOutputLine())]}
@@ -85,7 +89,7 @@ export class TruthTable extends Node {
                     height={this.cellHeight+5}
                     stroke={colors.POWERED_COLOR}
                     lineWidth={sizes.TRUTH_TABLE_BORDER_WIDTH}
-                />
+                />}
             </>
         );
     }

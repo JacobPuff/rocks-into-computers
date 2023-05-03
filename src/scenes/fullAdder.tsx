@@ -424,6 +424,7 @@ export default makeScene2D(function* (view) {
             ref={makeRef(truthTables, truthTables.length)}
             position={[-700,-150]}
             opacity={0}
+            hasSelector={false}
             columnNames={["num","binary"]}
             columnData={[
                 ["8","00001001"],
