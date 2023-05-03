@@ -56,6 +56,8 @@ export default makeScene2D(function* (view) {
         )
     ))
     const fullAdder = rippleAdders[0]
+    fullAdder.inputA = inputA
+    fullAdder.inputB = inputB
     const rippleWires: Layout[] = rippleAdders.map((rippleAdder,i)=>(
         <Layout opacity={0}>
             <Wire
@@ -414,7 +416,7 @@ export default makeScene2D(function* (view) {
         truthTables[0].opacity(0,0.5),
         fullAdderWires().opacity(0,0.5),
     )
-    // Set first full adders inputs to big nums
+    // Set first full adder's inputs to ripple nums
     inputA(()=>getInput(0,0,rippleTable()))
     inputB(()=>getInput(0,1,rippleTable()))
     carryIn(false)
