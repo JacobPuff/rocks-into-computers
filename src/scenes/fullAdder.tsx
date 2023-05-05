@@ -64,7 +64,8 @@ export default makeScene2D(function* (view) {
                 ref={makeRef(wires, wires.length)}
                 powered={()=>getInput(i,0,rippleTable())}
                 points={[
-                    [rippleAdder.inputAPos.x,150],
+                    [rippleAdder.position.x(),100],
+                    [rippleAdder.inputAPos.x,100],
                     rippleAdder.inputAPos,
                 ]}
             />
@@ -72,7 +73,8 @@ export default makeScene2D(function* (view) {
                 ref={makeRef(wires, wires.length)}
                 powered={()=>getInput(i,1,rippleTable())}
                 points={[
-                    [rippleAdder.inputBPos.x,150],
+                    [rippleAdder.position.x(),170],
+                    [rippleAdder.inputBPos.x,170],
                     rippleAdder.inputBPos,
                 ]}
             />
@@ -109,12 +111,12 @@ export default makeScene2D(function* (view) {
             <VisualIO
                 name={"A"+superInts[i+1]}
                 powered={()=>getInput(i,0,rippleTable())}
-                position={[rippleAdder.inputAPos.x,150]}
+                position={[rippleAdder.position.x(),100]}
             />
             <VisualIO
                 name={"B"+superInts[i+1]}
                 powered={()=>getInput(i,1,rippleTable())}
-                position={[rippleAdder.inputBPos.x,150]}
+                position={[rippleAdder.position.x(),170]}
             />
             
             {(i==rippleSize-1) && (
