@@ -429,15 +429,36 @@ export default makeScene2D(function* (view) {
             hasSelector={false}
             columnNames={["num","binary"]}
             columnData={[
-                ["8","00001001"],
-                ["5","00000101"],
-                ["13","00001110"],
+                ["9", "00001001"],
+                ["5", "00000101"],
+                ["14","00001110"],
             ]}
         />
     )
     yield* truthTables[1].opacity(1,0.5)
     isRippleAdding(true)
     yield* beginSlide("ripple adder start adding")
+    isRippleAdding(false)
+    yield* truthTables[1].opacity(0,0.5)
+    truthTables[1].remove()
+    view.add(
+        <TruthTable
+            ref={makeRef(truthTables, truthTables.length)}
+            position={[-700,-150]}
+            opacity={0}
+            hasSelector={false}
+            columnNames={["num","binary"]}
+            columnData={[
+                ["255", "11111111"],
+                ["1",   "00000001"],
+                ["0",   "00000000"],
+            ]}
+        />
+    )
+    yield* truthTables[2].opacity(1,0.5)
+    rippleTable(2)
+    isRippleAdding(true)
+    yield* beginSlide("ripple adder overflow")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
