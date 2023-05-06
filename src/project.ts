@@ -9,6 +9,6 @@ import fullAdder from './scenes/fullAdder?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [fullAdder, notGate, andGates, orGates, halfAdder],
+  scenes: [notGate, andGates, orGates, halfAdder, fullAdder],
   variables: {backgroundColor: '#2c2938'}
 });
