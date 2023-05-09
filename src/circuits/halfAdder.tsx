@@ -44,7 +44,7 @@ export class HalfAdder extends Node {
                     text={"Half Adder"}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
-                    fontSize={20}
+                    fontSize={sizes.DEFAULT_FONT_SIZE}
                     fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 />
             </>
