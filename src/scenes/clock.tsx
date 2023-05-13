@@ -95,14 +95,14 @@ export default makeScene2D(function* (view) {
     // Reversed so the typical heirarchy is consistent between wires. Defined first means on bottom.
     wires.reverse().forEach(v => v.moveToBottom());
 
-    const bgAnimateWires = yield loop(10000, function* (){
+    const bgAnimateWires = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all(...wires.map(w=>w.animate()))
     })
     yield* slideTransition(Direction.Right, 1);
     
     const propagationDelay = createSignal(1)
     yield* waitFor(1)
-    const bgPropogateOutputs = yield loop(10000, function* (){
+    const bgPropogateOutputs = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* waitFor(propagationDelay())
         notGates[0].inputA(!notGates[0].inputA())
         yield* waitFor(propagationDelay())

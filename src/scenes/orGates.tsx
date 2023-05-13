@@ -195,12 +195,12 @@ export default makeScene2D(function* (view) {
     // Reversed so the typical heirarchy is consistent between wires. Defined first means on bottom.
     wires.reverse().forEach(v => v.moveToBottom());
 
-    const bgAnimateWires = yield loop(10000, function* (){
+    const bgAnimateWires = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all(...wires.map(w=>w.animate()))
     })
     yield* slideTransition(Direction.Right, 1);
     waitFor(0.5)
-    const bgSelectRows = yield loop(10000, function* (){
+    const bgSelectRows = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all (
             ...truthTables.map(table=>{
                 let nextRow = (table.currentOutputLine()+1) % table.columnData().length

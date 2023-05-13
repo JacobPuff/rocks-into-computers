@@ -9,3 +9,4 @@ export const VISUAL_IO_SIZE: number = 50;
 export const VISUAL_IO_TEXT_SIZE: number = 25;
 export const DEFAULT_FONT_WEIGHT = 700;
 export const DEFAULT_FONT_SIZE = 20;
+export const LOOP_LENGTH = 99999;

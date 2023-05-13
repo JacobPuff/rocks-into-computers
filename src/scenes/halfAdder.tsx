@@ -238,12 +238,12 @@ export default makeScene2D(function* (view) {
     andWires().moveToBottom()
     xorWires().moveToBottom()
 
-    const bgAnimateWires = yield loop(10000, function* (){
+    const bgAnimateWires = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all(...wires.map(w=>w.animate()))
     })
     yield* slideTransition(Direction.Right, 1);
     waitFor(0.5)
-    const bgSelectRows = yield loop(10000, function* (){
+    const bgSelectRows = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all (
             ...truthTables.map(table=>{
                 // Used this way to sync the two tables selectors so the inputs don't jitter.
