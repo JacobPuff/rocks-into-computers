@@ -1,5 +1,5 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
-import {Circle, NodeProps, Node, Spline, Knot} from '@motion-canvas/2d/lib/components';
+import {Circle, NodeProps, Node, Line, Knot} from '@motion-canvas/2d/lib/components';
 import { createRef, range} from '@motion-canvas/core/lib/utils';
 import { createSignal, SignalValue, SimpleSignal } from '@motion-canvas/core/lib/signals';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
@@ -18,7 +18,7 @@ export interface WireProps extends NodeProps {
   
 export class Wire extends Node {
     // implementation
-    private readonly wireSpline = createRef<Spline>();
+    private readonly wireLine = createRef<Line>();
 
     @initial([[0,0],[0,0]])
     @signal()
@@ -57,22 +57,21 @@ export class Wire extends Node {
         })
         this.add(
             <>
-                <Spline
+                <Line
                     lineCap="round"
-                    ref={this.wireSpline}
+                    ref={this.wireLine}
                     lineWidth={sizes.WIRE_WIDTH}
-                    smoothness={0}
                     stroke={colors.OFF_COLOR}>
                     {this.points().map(b=>
                         <Knot position={b}/>
                     )}
-                </Spline>
+                </Line>
                 {range(this.totalDots).map(v=>
                     <Circle 
                     opacity={()=>this.powered()?1:0}
                     size={sizes.ELEC_WIDTH}
                     fill={colors.POWERED_COLOR}
-                    position={() => this.wireSpline().getPointAtPercentage(this.progress()+this.percentage*v).position}/>
+                    position={() => this.wireLine().getPointAtPercentage(this.progress()+this.percentage*v).position}/>
                 )}
                 
                 {this.jointStart() &&
