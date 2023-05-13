@@ -16,16 +16,12 @@ import * as sizes from '../globalSizes'
 
 export default makeScene2D(function* (view) {
     const slideTitle = createRef<Txt>();
-    const truthTables: TruthTable[] = []
-    const wires: Wire[] = [];
     const stepsList: Txt[] = [];
     // Negative number values are in ones compliment
     const binaryNums: Record<string, Txt> = {};
     const binaryId = (id: string) => makeRef(binaryNums, id);
     const decimalNums: Record<string, Txt> = {};
     const decimalId = (id: string) => makeRef(decimalNums, id);
-    // const numberGroups: Record<string, Txt> = {};
-    // const numberGroupId = (id: string) => makeRef(numberGroups, id);
 
     const makeBinaryNum = (id: string, text:string,  x: number = 0, y: number = 0)=>{
         return (
@@ -85,26 +81,8 @@ export default makeScene2D(function* (view) {
             />
         </>
     );
-    // Reversed so the typical heirarchy is consistent between wires. Defined first means on bottom.
-    wires.reverse().forEach(v => v.moveToBottom());
 
-    const bgAnimateWires = yield loop(10000, function* (){
-        yield* all(...wires.map(w=>w.animate()))
-    })
-    yield* slideTransition(Direction.Right, 1);
-    waitFor(0.5)
-    const bgSelectRows = yield loop(10000, function* (){
-        yield* all (
-            ...truthTables.map(table=>{
-                let nextRow = (table.currentOutputLine()+1) % table.columnData().length
-                return table.select(nextRow, sizes.TRUTH_TABLE_DEFAULT_SPEED)
-            })
-        )
-        yield* waitFor(1)
-        
-    })
-
-    const getYPos = (i)=>100+i*50
+    const getYPos = (i:number)=>100+i*50
     const numbersXPos = -400
     yield* beginSlide("subtraction intro");
     const bitLength = 4
@@ -176,6 +154,4 @@ export default makeScene2D(function* (view) {
     yield* stepsList[stepsList.length-1].opacity(1,1)
     yield* slideTitle().text("Two's Compliment",1)
     yield* beginSlide("remove -0 and reveal twos compliment")
-    cancel(bgAnimateWires);
-    cancel(bgSelectRows);
 });
