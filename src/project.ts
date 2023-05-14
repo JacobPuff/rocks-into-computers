@@ -12,6 +12,6 @@ import flipflop from './scenes/flipflop?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [flipflop, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock],
+  scenes: [notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop],
   variables: {backgroundColor: '#2c2938'}
 });
