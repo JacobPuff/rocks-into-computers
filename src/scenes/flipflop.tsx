@@ -591,6 +591,7 @@ export default makeScene2D(function* (view) {
         enableVisualIO().opacity(1,1),
         gatedDLatch().opacity(1,1),
         gatedDLatchWires().opacity(1,1),
+        slideTitle().text("Gated D Latch", 1)
     )
     currentTable(2)
     pauseTableSelect(false)
