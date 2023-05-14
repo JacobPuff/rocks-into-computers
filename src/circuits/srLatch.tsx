@@ -70,6 +70,7 @@ export class SRLatch extends Node {
                 />
                 <Txt
                     text={"R"}
+                    rotation={()=>this.rotation()*-1 }
                     position={[this.localResetPos.x, this.localResetPos.y - 10]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
@@ -78,6 +79,7 @@ export class SRLatch extends Node {
                 />
                 <Txt
                     text={"S"}
+                    rotation={()=>this.rotation()*-1 }
                     position={[this.localSetPos.x, this.localSetPos.y - 10]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
@@ -86,6 +88,7 @@ export class SRLatch extends Node {
                 />
                 <Txt
                     text={"Q"}
+                    rotation={()=>this.rotation()*-1 }
                     position={[this.localOutputPos.x, this.localOutputPos.y + 17]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
@@ -94,6 +97,7 @@ export class SRLatch extends Node {
                 />
                 <Txt
                     text={"Q̅"}
+                    rotation={()=>this.rotation()*-1 }
                     position={[this.localNotOutputPos.x, this.localNotOutputPos.y + 17]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
