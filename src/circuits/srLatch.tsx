@@ -71,7 +71,7 @@ export class SRLatch extends Node {
                 <Txt
                     text={"R"}
                     rotation={()=>this.rotation()*-1}
-                    position={[this.localResetPos.x, this.localResetPos.y - 10]}
+                    position={[this.localResetPos.x, this.localResetPos.y - 12]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
                     fontSize={sizes.INPUT_MARKER_FONT_SIZE}
@@ -80,7 +80,7 @@ export class SRLatch extends Node {
                 <Txt
                     text={"S"}
                     rotation={()=>this.rotation()*-1}
-                    position={[this.localSetPos.x, this.localSetPos.y - 10]}
+                    position={[this.localSetPos.x, this.localSetPos.y - 12]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
                     fontSize={sizes.INPUT_MARKER_FONT_SIZE}
