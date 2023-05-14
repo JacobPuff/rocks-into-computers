@@ -38,14 +38,14 @@ export class SRLatch extends Node {
     });
     public notOutput: SimpleSignal<boolean, this> = createSignal(() => !this.output());
 
-    private readonly localSetPos: Vector2 = new Vector2(-50,50)
-    private readonly localResetPos: Vector2 = new Vector2(50,50)
-    private readonly localOutputPos: Vector2 =  new Vector2(-50,-50)
-    private readonly localNotOutputPos: Vector2 =  new Vector2(50,-50)
-    public readonly setPos: Vector2 = this.localSetPos.transformAsPoint(this.localToWorld());
-    public readonly resetPos: Vector2 = this.localResetPos.transformAsPoint(this.localToWorld());
-    public readonly outputPos: Vector2 = this.localOutputPos.transformAsPoint(this.localToWorld());
-    public readonly notOutputPos: Vector2 = this.localNotOutputPos.transformAsPoint(this.localToWorld());
+    private readonly localResetPos: Vector2 = new Vector2(-50,50)
+    private readonly localSetPos: Vector2 = new Vector2(50,50)
+    private readonly localOutputPos: Vector2 = new Vector2(-50,-50)
+    private readonly localNotOutputPos: Vector2 = new Vector2(50,-50)
+    public resetPos: SimpleSignal<Vector2,this> = createSignal(() =>this.localResetPos.transformAsPoint(this.localToParent()));
+    public setPos: SimpleSignal<Vector2,this> = createSignal(() =>this.localSetPos.transformAsPoint(this.localToParent()));
+    public outputPos: SimpleSignal<Vector2,this> = createSignal(() =>this.localOutputPos.transformAsPoint(this.localToParent()));
+    public notOutputPos: SimpleSignal<Vector2,this> = createSignal(() =>this.localNotOutputPos.transformAsPoint(this.localToParent()));
     
     public constructor(props?: SRLatchProps) {
         super({
@@ -69,16 +69,16 @@ export class SRLatch extends Node {
                     fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 />
                 <Txt
-                    text={"S"}
-                    position={[this.localSetPos.x, this.localSetPos.y - 10]}
+                    text={"R"}
+                    position={[this.localResetPos.x, this.localResetPos.y - 10]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
                     fontSize={sizes.INPUT_MARKER_FONT_SIZE}
                     fontWeight={sizes.DEFAULT_FONT_WEIGHT}
                 />
                 <Txt
-                    text={"R"}
-                    position={[this.localResetPos.x, this.localResetPos.y - 10]}
+                    text={"S"}
+                    position={[this.localSetPos.x, this.localSetPos.y - 10]}
                     fill={colors.TEXT_COLOR}
                     fontFamily="Helvetica"
                     fontSize={sizes.INPUT_MARKER_FONT_SIZE}
