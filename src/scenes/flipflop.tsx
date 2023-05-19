@@ -17,6 +17,7 @@ import { Signal, SimpleSignal, createSignal, SignalValue } from '@motion-canvas/
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
 import { AndGate } from '../basics/and';
+import { GatedDLatch } from '../circuits/gatedDLatch';
 
 export default makeScene2D(function* (view) {
     const slideTitle = createRef<Txt>();
@@ -32,6 +33,8 @@ export default makeScene2D(function* (view) {
     const tinySRLatchIntroComponents = createRef<Layout>();
     const tinySRLatchOutputs = createRef<Layout>();
     const tinySRLatch = createRef<SRLatch>()
+    const tinyDLatch = createRef<GatedDLatch>();
+    const tinyDLatchIntroComponents = createRef<Layout>();
     const setValue = createSignal(()=>truthTables[0].outputRow()[0] == 1)
     const resetValue = createSignal(()=>truthTables[0].outputRow()[1] == 1)
     const outputValue = createSignal(()=>truthTables[0].outputRow()[2])
@@ -456,23 +459,23 @@ export default makeScene2D(function* (view) {
     yield* beginSlide("D Latch")
 
     pauseTableSelect(true)
-    let log = useLogger()
+    view.add(
+        <TruthTable
+            ref={makeRef(truthTables, truthTables.length)}
+            opacity={0}
+            position={[-600,0]}
+            columnNames={["D", "E", "Q"]}
+            columnData={[
+                [0,0,"Q"],
+                [1,0,"Q"],
+                [1,1, 1],
+                [1,0,"Q"],
+                [0,0,"Q"],
+                [0,1, 0],
+            ]}
+        />)
     circuitLayout().add(<>
         <Layout ref={gatedDLatch} opacity={0}>
-            
-            <TruthTable
-                ref={makeRef(truthTables, truthTables.length)}
-                position={[-800,0]}
-                columnNames={["D", "E", "Q"]}
-                columnData={[
-                    [0,0,"Q"],
-                    [1,0,"Q"],
-                    [1,1, 1],
-                    [1,0,"Q"],
-                    [0,0,"Q"],
-                    [0,1, 0],
-                ]}
-            />
             <AndGate
                 ref={resetAndGate}
                 rotation={90}
@@ -589,15 +592,101 @@ export default makeScene2D(function* (view) {
     resetNotGate().inputA(dataValue)
     yield* all(
         enableVisualIO().opacity(1,1),
+        truthTables[2].opacity(1,1),
         gatedDLatch().opacity(1,1),
         gatedDLatchWires().opacity(1,1),
         slideTitle().text("Gated D Latch", 1)
     )
     currentTable(2)
     pauseTableSelect(false)
-    log.debug("TEST:" + resetAndGate().inputAPos.x + " "+ resetAndGate().inputAPos.y)
-    log.debug("TEST2:" + DFlipFlop().position.x() + " "+ DFlipFlop().position.y())
-    yield* beginSlide("Gated D Latch")
+    yield* beginSlide("Gated D Latch raw")
+    DFlipFlopWire().reparent(circuitLayout())
+    DFlipFlop().reparent(circuitLayout())
+    
+    view.add(<>
+        <GatedDLatch
+            ref={tinyDLatch}
+            opacity={0}
+            position={[150,0]}
+            rotation={90}
+            data={dataValue}
+            enable={enableValue}
+        />
+    </>)
+    yield* all(
+        circuitLayout().opacity(0,1),
+        circuitLayout().scale(0,1),
+        delay(0.5,tinyDLatch().opacity(1,1)),
+    )
+    yield* all(
+        tinyDLatch().rotation(0,1),
+        tinyDLatch().position.x(0,1),
+    )
+    circuitLayout().remove()
+    view.add(<>
+        <Layout ref={tinyDLatchIntroComponents} opacity={0}>
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={dataValue}
+                points={[
+                    [tinyDLatch().dataPos().x, tinyDLatch().dataPos().y+100],
+                    tinyDLatch().dataPos(),
+                ]}
+            />
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={enableValue}
+                points={[
+                    [tinyDLatch().enablePos().x, tinyDLatch().enablePos().y+100],
+                    tinyDLatch().enablePos(),
+                ]}
+            />
+            
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={tinyDLatch().output}
+                points={[
+                    tinyDLatch().outputPos(),
+                    [tinyDLatch().outputPos().x, tinyDLatch().outputPos().y-100],
+                ]}
+            />
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={tinyDLatch().notOutput}
+                points={[
+                    tinyDLatch().notOutputPos(),
+                    [tinyDLatch().notOutputPos().x, tinyDLatch().notOutputPos().y-100],
+                ]}
+            />
+            <VisualIO
+                name={"D"}
+                position={[tinyDLatch().dataPos().x, tinyDLatch().dataPos().y+100]}
+                powered={dataValue}
+            />
+            <VisualIO
+                name={"E"}
+                position={[tinyDLatch().enablePos().x, tinyDLatch().enablePos().y+100]}
+                powered={enableValue}
+            />
+            <VisualIO
+                name={"Q"}
+                powered={tinyDLatch().output}
+                position={
+                    [tinyDLatch().outputPos().x, tinyDLatch().outputPos().y-100]
+                }
+            />
+            <VisualIO
+                name={"Q̅"}
+                powered={tinyDLatch().notOutput}
+                position={
+                    [tinyDLatch().notOutputPos().x, tinyDLatch().notOutputPos().y-100]
+                }
+            />
+        </Layout>
+    </>)
+    tinyDLatchIntroComponents().moveToBottom()
+    yield* tinyDLatchIntroComponents().opacity(1,1)
+    yield* beginSlide("Gated D Latch circuit")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
