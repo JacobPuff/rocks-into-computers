@@ -280,7 +280,6 @@ export default makeScene2D(function* (view) {
         delay(0.7,slideTitle().text("Half Adder",1)),
     )
     yield* beginSlide("scaled down circuit, reveal HalfAdder");
-    yield* beginSlide("Reveal ripple adder")
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
