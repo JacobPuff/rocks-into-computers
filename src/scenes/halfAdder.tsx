@@ -59,12 +59,12 @@ export default makeScene2D(function* (view) {
                 ref={makeRef(truthTables, truthTables.length)}
                 opacity={0}
                 position={[-400,0]}
-                columnNames={["A", "B", "Sum", "Carry"]}
+                columnNames={["A", "B", "Carry", "Sum"]}
                 columnData={[
                     [0,0,0,0],
-                    [1,0,1,0],
-                    [0,1,1,0],
-                    [1,1,0,1],
+                    [1,0,0,1],
+                    [0,1,0,1],
+                    [1,1,1,0],
                 ]}
             />
             <Layout ref={internalsLayout} opacity={1}>
@@ -267,7 +267,7 @@ export default makeScene2D(function* (view) {
     truthTables[0].remove()
     currentTable = 1
 
-    yield* beginSlide("updated truthtable");
+    yield* beginSlide("updated truthtable (carry)");
     yield* all(
         andWires().opacity(1,1),
         andGate().opacity(1,1),
