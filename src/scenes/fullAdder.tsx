@@ -148,14 +148,14 @@ export default makeScene2D(function* (view) {
             <TruthTable
                 ref={makeRef(truthTables, truthTables.length)}
                 position={[-400,0]}
-                columnNames={["A¹", "B¹", "Cᶦⁿ", "", "Sum", "Cᵒᵘᵗ"]}
+                columnNames={["A¹", "B¹", "Cᶦⁿ", "", "Cᵒᵘᵗ", "Sum"]}
                 columnData={[
                     [0,0,0,"",0,0],
-                    [1,0,0,"",1,0],
-                    [0,1,0,"",1,0],
-                    [0,0,1,"",1,0],
-                    [1,1,0,"",0,1],
-                    [1,0,1,"",0,1],
+                    [1,0,0,"",0,1],
+                    [0,1,0,"",0,1],
+                    [0,0,1,"",0,1],
+                    [1,1,0,"",1,0],
+                    [1,0,1,"",1,0],
                     [1,1,1,"",1,1],
                 ]}
             />
