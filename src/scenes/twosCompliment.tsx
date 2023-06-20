@@ -93,6 +93,7 @@ export default makeScene2D(function* (view) {
     view.add(range(6).map((num, i)=>makeDecimalNum(num.toString(),num.toString()+" =", binaryNums[num])))
     view.add(makeStepsText("Steps:", stepsBaseX,getStepsYPos()))
     yield* all(
+        slideTitle().text("Negative numbers",1),
         ...Object.keys(binaryNums).map((key, i)=> delay(insertNumberDelay*i, binaryNums[key].opacity(1, 0.3)))
     )
     yield* stepsList[stepsList.length-1].opacity(1,0.3)
