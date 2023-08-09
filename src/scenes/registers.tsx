@@ -265,7 +265,7 @@ export default makeScene2D(function* (view) {
         clock().powered(!clock().powered())
         storeLooped() // reading stored signal so it may be updated
     })
-    yield* beginSlide("Load signal")
+    yield* beginSlide("using just latches")
     
     pauseTableSelect(true)
     yield* all(
@@ -384,8 +384,10 @@ export default makeScene2D(function* (view) {
     currentTable(1)
     pauseTableSelect(false)
 
-    yield* waitFor(5)
-    yield* beginSlide("next")
+    yield* beginSlide("Load signal")
+    // Build tinyRegister and throw it in here
+    // Slide titles are always describing the above code
+    yield* beginSlide("N-bit Register circuit")
     yield* beginSlide("end")
     cancel(bgAnimateWires);
     cancel(bgRunClock);
