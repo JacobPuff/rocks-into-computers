@@ -9,9 +9,10 @@ import fullAdder from './scenes/fullAdder?scene';
 import twosCompliment from './scenes/twosCompliment?scene';
 import clock from './scenes/clock?scene';
 import flipflop from './scenes/flipflop?scene';
+import registers from './scenes/registers?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop],
+  scenes: [registers, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop],
   variables: {backgroundColor: '#2c2938'}
 });
