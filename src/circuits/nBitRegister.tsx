@@ -41,12 +41,21 @@ export class NBitRegister extends Node {
         }
         return this.stored
     });
-    public readonly inputAPos: Vector2 = new Vector2(-50,50).transformAsPoint(this.localToWorld());
-    public readonly inputBPos: Vector2 = new Vector2(50,50).transformAsPoint(this.localToWorld());
     private readonly rectRef: Reference<Rect> = createRef<Rect>()
-    public carryInPos: Vector2 = new Vector2(0,0)
-    public readonly sumPos: Vector2 =  new Vector2(50,-50).transformAsPoint(this.localToWorld());
-    public readonly carryOutPos: Vector2 =  new Vector2(-50,-50).transformAsPoint(this.localToWorld());
+    private readonly width = 150
+    private getIOPos = (n:number, isInput:boolean): Vector2 => {
+        let spaces = this.width / (this.numBits()+1)
+        let x =  this.width/2 - spaces * (n+1)
+        let y = isInput ? 50 : -50
+        return new Vector2(x,y).transformAsPoint(this.localToWorld());
+    }
+    public readonly getInputPos = (n: number): Vector2 => {
+        return this.getIOPos(n, true)
+    }
+    public readonly getOutputPos = (n: number): Vector2 => {
+        return this.getIOPos(n, false)
+    }
+
 
     public constructor(props?: NBitRegisterProps) {
         super({
@@ -57,7 +66,7 @@ export class NBitRegister extends Node {
             <Rect
                 ref={this.rectRef}
                 fill={colors.GATE_COLOR}
-                width={150}
+                width={this.width}
                 height={100}
                 lineWidth={sizes.WIRE_WIDTH}
                 stroke={()=>(this.load() || this.reset()) ? colors.POWERED_COLOR:colors.OFF_COLOR}
