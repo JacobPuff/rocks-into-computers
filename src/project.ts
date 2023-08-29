@@ -13,6 +13,6 @@ import registers from './scenes/registers?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [registers, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop],
+  scenes: [notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop, registers],
   variables: {backgroundColor: '#2c2938'}
 });
