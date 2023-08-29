@@ -81,6 +81,5 @@ export class NBitRegister extends Node {
                 />
             </>
         );
-        this.carryInPos = new Vector2(this.rectRef().getOriginDelta(Origin.Right).x-sizes.ELEC_WIDTH,20).transformAsPoint(this.localToWorld());
     }
 }
