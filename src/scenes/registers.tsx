@@ -6,7 +6,7 @@ import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
 import { OrGate } from '../basics/or';
 import {NotGate} from '../basics/not';
-import { HalfAdder } from '../circuits/halfAdder';
+import { NBitRegister } from '../circuits/nBitRegister';
 import { SRLatch } from '../circuits/srLatch';
 import {all, any, noop, waitFor} from '@motion-canvas/core/lib/flow';
 import {slideTransition} from '@motion-canvas/core/lib/transitions';
@@ -57,7 +57,7 @@ export default makeScene2D(function* (view) {
             />
     </>)
     const wires: Wire[] = [];
-    const wireLayouts: Record<string, Wire> = {};
+    const wireLayouts: Record<string, Layout> = {};
     const circuitLayout = createRef<Layout>();
     const dLatches: GatedDLatch[] = [];
     const dataInputs = createSignal(()=>{
@@ -70,10 +70,12 @@ export default makeScene2D(function* (view) {
     const dataInputsNode = createRef<Node>();
     const clock = createRef<VisualIO>();
     const load = createRef<VisualIO>();
+    const loadSig = createSignal(false)
     const loadGatesNode = createRef<Node>();
     const orGates: OrGate[] = [];
     const notGates: NotGate[] = [];
     const andGates: Record<string, AndGate> = {};
+    const tinyRegister = createRef<NBitRegister>();
 
     let storedValuesRaw: number[] = [0,0,0,0]
     let foo = false
@@ -198,7 +200,7 @@ export default makeScene2D(function* (view) {
                         x={()=>clock().position.x()}
                         y={loadYOffset}
                         name={"Load"}
-                        powered={false}
+                        powered={loadSig}
                     />
                     {dLatches.map((latch, idx)=><Node>
                             <OrGate
@@ -212,20 +214,20 @@ export default makeScene2D(function* (view) {
                                 ref={makeRef(andGates, idx+"A")}
                                 scale={0.7}
                                 inputA={()=>(storedValues[idx]() == 1)}
-                                inputB={()=>!load().powered()}
+                                inputB={()=>!loadSig()()}
                                 position={[orGates[idx].inputAPos.x, orGates[idx].inputAPos.y+55]}
                             />
                             <AndGate
                                 ref={makeRef(andGates, idx+"B")}
                                 scale={0.7}
                                 position={[orGates[idx].inputBPos.x+loadAndSpacing, orGates[idx].inputBPos.y+55]}
-                                inputA={load().powered}
+                                inputA={loadSig()}
                                 inputB={()=>dataInputs()[idx]==1}
                             />
                             <NotGate
                                 ref={makeRef(notGates, idx)}
                                 scale={0.7}
-                                inputA={load().powered}
+                                inputA={loadSig()}
                                 position={[andGates[idx+"A"].inputBPos.x, andGates[idx+"A"].inputBPos.y+70]}
                             />
                     </Node>)}
@@ -237,7 +239,7 @@ export default makeScene2D(function* (view) {
     wires.reverse().forEach(v => v.moveToBottom());
     Object.values(wireLayouts).forEach(v=> v.moveToBottom());
     
-    load().powered(()=> truthTables[currentTable()].outputRow()[1])
+    loadSig(()=> truthTables[currentTable()].outputRow()[1])
     const bgAnimateWires = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* all(...wires.map(w=>w.animate()))
     })
@@ -281,7 +283,7 @@ export default makeScene2D(function* (view) {
         <Layout ref={makeRef(wireLayouts, "loadSignalWires")} opacity={0}>
         <Wire
             ref={makeRef(wires, wires.length)}
-            powered={load().powered}
+            powered={loadSig()}
             points={[
                 load().position(),
                 [andGates[(dLatches.length-1)+"B"].inputAPos.x, loadYOffset],
@@ -291,7 +293,7 @@ export default makeScene2D(function* (view) {
             {/* Load to AND */}
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={load().powered}
+                powered={loadSig()}
                 jointStart
                 points={[
                     [notGates[idx].inputPos.x, loadYOffset],
@@ -308,7 +310,7 @@ export default makeScene2D(function* (view) {
             />
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={load().powered}
+                powered={loadSig()}
                 jointStart
                 points={[
                     [andGates[idx+"B"].inputAPos.x, loadYOffset],
@@ -385,10 +387,93 @@ export default makeScene2D(function* (view) {
     pauseTableSelect(false)
 
     yield* beginSlide("Load signal")
+    
+    const tinyRegisterInputSpacing = 100
+    view.add(<>
+        <NBitRegister
+            opacity={0}
+            y={0}
+            ref={tinyRegister}
+            input={() => dataInputs().join("")}
+            load={loadSig}
+            numBits={4}
+        />
+        <Layout opacity={0} y={0} ref={makeRef(wireLayouts, "tinyRegisterWires")}>
+            <>
+            {range(latchCount).map(i=>{
+                let x = tinyRegisterInputSpacing*((latchCount-1)/2) - (tinyRegisterInputSpacing * i)
+                let y = [100, 120, 120, 100]
+                return <>
+                    {/* Inputs */}
+                    <Wire
+                        ref={makeRef(wires, wires.length)}
+                        powered={()=>dataInputs()[latchCount-i-1] == 1}
+                        points={[
+                            [x, 200],
+                            [x, y[i]],
+                            [tinyRegister().getInputPos(i).x, y[i]],
+                            tinyRegister().getInputPos(i)
+                        ]}
+                    />
+                    {/* Outputs */}
+                    <Wire
+                        ref={makeRef(wires, wires.length)}
+                        powered={()=>tinyRegister().output()[latchCount-i-1] == '1'}
+                        points={[
+                            tinyRegister().getOutputPos(i),
+                            [tinyRegister().getOutputPos(i).x, -y[i]],
+                            [x, -y[i]],
+                            [x, -200],
+                        ]}
+                    />
+                    <VisualIO
+                        x={x}
+                        y={200}
+                        name={"In"+superInts[i]}
+                        powered={()=>dataInputs()[latchCount-i-1] == 1}
+                    />
+                    <VisualIO
+                        x={x}
+                        y={-200}
+                        name={"Out"+superInts[i]}
+                        powered={()=>tinyRegister().output()[latchCount-i-1]=='1'}
+                    />
+                </>
+            })}
+            </>
+            
+            {/* Load signal */}
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={loadSig}
+                points={[
+                    [-200, 0],
+                    [0,0]
+                ]}
+            />
+            <VisualIO
+                x={-200}
+                name={"Load"}
+                powered={loadSig}
+            />
+        </Layout>
+
+    </>)
+    
+    wireLayouts.tinyRegisterWires.moveToBottom()
+    yield* all(
+        circuitLayout().position([0,50],1),
+        circuitLayout().scale(0,1),
+        circuitLayout().opacity(0,1),
+        wireLayouts.tinyRegisterWires.opacity(1,1),
+        tinyRegister().opacity(1,1),
+        
+    )
+    circuitLayout().remove()
+
     // Build tinyRegister and throw it in here
     // Slide titles are always describing the above code
     yield* beginSlide("N-bit Register circuit")
-    yield* beginSlide("end")
     cancel(bgAnimateWires);
     cancel(bgRunClock);
     cancel(bgSelectRows);
