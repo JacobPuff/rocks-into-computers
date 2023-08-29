@@ -392,13 +392,12 @@ export default makeScene2D(function* (view) {
     view.add(<>
         <NBitRegister
             opacity={0}
-            y={0}
             ref={tinyRegister}
             input={() => dataInputs().join("")}
             load={loadSig}
             numBits={4}
         />
-        <Layout opacity={0} y={0} ref={makeRef(wireLayouts, "tinyRegisterWires")}>
+        <Layout opacity={0} ref={makeRef(wireLayouts, "tinyRegisterWires")}>
             <>
             {range(latchCount).map(i=>{
                 let x = tinyRegisterInputSpacing*((latchCount-1)/2) - (tinyRegisterInputSpacing * i)
@@ -465,8 +464,8 @@ export default makeScene2D(function* (view) {
         circuitLayout().position([0,0],1),
         circuitLayout().scale(0,1),
         circuitLayout().opacity(0,1),
-        wireLayouts.tinyRegisterWires.opacity(1,1),
-        tinyRegister().opacity(1,1),
+        delay(0.7, wireLayouts.tinyRegisterWires.opacity(1,1)),
+        delay(0.7, tinyRegister().opacity(1,1)),
         
     )
     circuitLayout().remove()
