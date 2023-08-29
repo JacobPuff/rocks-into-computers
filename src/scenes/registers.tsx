@@ -462,7 +462,7 @@ export default makeScene2D(function* (view) {
     
     wireLayouts.tinyRegisterWires.moveToBottom()
     yield* all(
-        circuitLayout().position([0,50],1),
+        circuitLayout().position([0,0],1),
         circuitLayout().scale(0,1),
         circuitLayout().opacity(0,1),
         wireLayouts.tinyRegisterWires.opacity(1,1),
