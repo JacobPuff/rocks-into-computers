@@ -130,7 +130,7 @@ export default makeScene2D(function* (view) {
                         x={()=>(idx*latchSpacing()-halfRegisterWidth() )}
                         ref={makeRef(dLatches, dLatches.length)}
                         data={()=>dataInputs()[idx]==1}
-                        enable={()=>clock().powered() || true}
+                        enable={()=>clock().powered()}
                     />
                 )}
                 <Layout ref={makeRef(wireLayouts, "initialDLatchWiresAndOutIO")}>
