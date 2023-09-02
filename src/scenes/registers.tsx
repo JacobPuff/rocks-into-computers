@@ -75,7 +75,6 @@ export default makeScene2D(function* (view) {
     const tinyRegister = createRef<NBitRegister>();
 
     let storedValuesRaw: number[] = [0,0,0,0]
-    let foo = false
     let storedValues = storedValuesRaw.map(v => createSignal(v))
     const storeLooped = ()=> {
         if (dLatches.length != 0) {
@@ -199,7 +198,8 @@ export default makeScene2D(function* (view) {
                         name={"Load"}
                         powered={loadSig}
                     />
-                    {dLatches.map((latch, idx)=><Node>
+                    {dLatches.map((latch, idx)=>
+                    <Node>
                             <OrGate
                                 ref={makeRef(orGates, idx)}
                                 scale={0.7}
