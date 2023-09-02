@@ -214,7 +214,7 @@ export default makeScene2D(function* (view) {
                                 ref={makeRef(andGates, idx+"A")}
                                 scale={0.7}
                                 inputA={()=>(storedValues[idx]() == 1)}
-                                inputB={()=>!loadSig()()}
+                                inputB={()=>!loadSig()}
                                 position={[orGates[idx].inputAPos.x, orGates[idx].inputAPos.y+55]}
                             />
                             <AndGate
