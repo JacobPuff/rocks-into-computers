@@ -48,10 +48,10 @@ export default makeScene2D(function* (view) {
                 columnData={[
                     ["0000", true],
                     ["0000", false],
-                    ["1010", false],
-                    ["1010", true],
-                    ["0010", true],
                     ["0010", false],
+                    ["0010", true],
+                    ["1010", true],
+                    ["1010", false],
                     ["0000", false],
                 ]}
             />
@@ -61,9 +61,6 @@ export default makeScene2D(function* (view) {
     const circuitLayout = createRef<Layout>();
     const dLatches: GatedDLatch[] = [];
     const dataInputs = createSignal(()=>{
-        // if (truthTables.length == 0) {
-        //     return [0,0,0,0]
-        // }
         var input = truthTables[currentTable()].outputRow()[0].split("")
         return input || [0,0,0,0]
     })
@@ -221,13 +218,13 @@ export default makeScene2D(function* (view) {
                                 ref={makeRef(andGates, idx+"B")}
                                 scale={0.7}
                                 position={[orGates[idx].inputBPos.x+loadAndSpacing, orGates[idx].inputBPos.y+55]}
-                                inputA={loadSig()}
+                                inputA={loadSig}
                                 inputB={()=>dataInputs()[idx]==1}
                             />
                             <NotGate
                                 ref={makeRef(notGates, idx)}
                                 scale={0.7}
-                                inputA={loadSig()}
+                                inputA={loadSig}
                                 position={[andGates[idx+"A"].inputBPos.x, andGates[idx+"A"].inputBPos.y+70]}
                             />
                     </Node>)}
@@ -283,7 +280,7 @@ export default makeScene2D(function* (view) {
         <Layout ref={makeRef(wireLayouts, "loadSignalWires")} opacity={0}>
         <Wire
             ref={makeRef(wires, wires.length)}
-            powered={loadSig()}
+            powered={loadSig}
             points={[
                 load().position(),
                 [andGates[(dLatches.length-1)+"B"].inputAPos.x, loadYOffset],
@@ -293,7 +290,7 @@ export default makeScene2D(function* (view) {
             {/* Load to AND */}
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={loadSig()}
+                powered={loadSig}
                 jointStart
                 points={[
                     [notGates[idx].inputPos.x, loadYOffset],
@@ -310,7 +307,7 @@ export default makeScene2D(function* (view) {
             />
             <Wire
                 ref={makeRef(wires, wires.length)}
-                powered={loadSig()}
+                powered={loadSig}
                 jointStart
                 points={[
                     [andGates[idx+"B"].inputAPos.x, loadYOffset],
