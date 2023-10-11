@@ -3,7 +3,7 @@ import {Circle, NodeProps, Node, Line, Knot} from '@motion-canvas/2d/lib/compone
 import { createRef, range} from '@motion-canvas/core/lib/utils';
 import { createSignal, SignalValue, SimpleSignal } from '@motion-canvas/core/lib/signals';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
-import * as colors from '../globalColors'; 
+import * as colors from '../globalColors';
 import * as sizes from '../globalSizes';
 import { PossibleVector2, Vector2 } from '@motion-canvas/core/lib/types';
 import { linear } from '@motion-canvas/core/lib/tweening';
@@ -67,13 +67,13 @@ export class Wire extends Node {
                     )}
                 </Line>
                 {range(this.totalDots).map(v=>
-                    <Circle 
+                    <Circle
                     opacity={()=>this.powered()?1:0}
                     size={sizes.ELEC_WIDTH}
                     fill={colors.POWERED_COLOR}
                     position={() => this.wireLine().getPointAtPercentage(this.progress()+this.percentage*v).position}/>
                 )}
-                
+
                 {this.jointStart() &&
                     <Circle
                     size={sizes.WIRE_JOINT_MIDDLE}
