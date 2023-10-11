@@ -66,6 +66,7 @@ export default makeScene2D(function* (view) {
     })
     const dataInputsNode = createRef<Node>();
     const clock = createRef<VisualIO>();
+    const pauseClock = createSignal(false)
     const load = createRef<VisualIO>();
     const loadSig = createSignal(false)
     const loadGatesNode = createRef<Node>();
@@ -261,11 +262,15 @@ export default makeScene2D(function* (view) {
     pauseTableSelect(false)
     const bgRunClock = yield loop(sizes.LOOP_LENGTH, function* (){
         yield* waitFor(1/clockHz/2)
-        clock().powered(!clock().powered())
+        if (!pauseClock()){
+            clock().powered(!clock().powered())
+        } else {
+            clock().powered(false) // prevents showing jittering electrons as things are added for a smoother transition
+        }
         storeLooped() // reading stored signal so it may be updated
     })
     yield* beginSlide("using just latches")
-    
+    pauseClock(true)
     pauseTableSelect(true)
     yield* all(
         circuitLayout().position.y(-100,1),
@@ -382,6 +387,7 @@ export default makeScene2D(function* (view) {
     storeLooped()
     currentTable(1)
     pauseTableSelect(false)
+    pauseClock(false)
 
     yield* beginSlide("Load signal")
     
