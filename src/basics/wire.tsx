@@ -14,6 +14,7 @@ export interface WireProps extends NodeProps {
     powered?: SignalValue<boolean>
     jointStart?: SignalValue<boolean>
     jointEnd?: SignalValue<boolean>
+    isSolid?: SignalValue<boolean>
   }
   
 export class Wire extends Node {
@@ -32,6 +33,9 @@ export class Wire extends Node {
     @initial(false)
     @signal()
     public declare readonly jointEnd: SimpleSignal<boolean, this>;
+    @initial(false)
+    @signal()
+    public declare readonly isSolid: SimpleSignal<boolean, this>;
     
     private readonly progress = createSignal(0);
     
@@ -61,12 +65,12 @@ export class Wire extends Node {
                     lineCap="round"
                     ref={this.wireLine}
                     lineWidth={sizes.WIRE_WIDTH}
-                    stroke={colors.OFF_COLOR}>
+                    stroke={()=>(this.isSolid() && this.powered()) ? colors.POWERED_COLOR : colors.OFF_COLOR}>
                     {this.points().map(b=>
                         <Knot position={b}/>
                     )}
                 </Line>
-                {range(this.totalDots).map(v=>
+                {!this.isSolid() && range(this.totalDots).map(v=>
                     <Circle
                     opacity={()=>this.powered()?1:0}
                     size={sizes.ELEC_WIDTH}
