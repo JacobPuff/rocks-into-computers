@@ -56,8 +56,8 @@ export default makeScene2D(function* (view) {
         )
     ))
     const fullAdder = rippleAdders[0]
-    fullAdder.inputA = inputA
-    fullAdder.inputB = inputB
+    fullAdder.inputA(inputA)
+    fullAdder.inputB(inputB)
     const rippleWires: Layout[] = rippleAdders.map((rippleAdder,i)=>(
         <Layout opacity={0}>
             <Wire
