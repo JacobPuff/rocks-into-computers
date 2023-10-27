@@ -7,8 +7,9 @@ import * as sizes from '../globalSizes'
 
 export interface VisualIOProps extends NodeProps {
     // properties
-    name?: SignalValue<string>
+    name: SignalValue<string>
     powered: SignalValue<boolean>
+    minWidth?: SignalValue<number>
   }
   
 export class VisualIO extends Node {
@@ -19,6 +20,9 @@ export class VisualIO extends Node {
     @initial(false)
     @signal()
     public declare powered: SimpleSignal<boolean, this>;
+    @initial(0)
+    @signal()
+    public declare minWidth: SimpleSignal<number, this>;
 
     public constructor(props?: VisualIOProps) {
         super({
@@ -30,7 +34,7 @@ export class VisualIO extends Node {
             {/* <Rect fill="#ffffff" width={120} height={120}/> */}
                 <Rect
                     minHeight={sizes.VISUAL_IO_SIZE}
-                    minWidth={sizes.VISUAL_IO_SIZE}
+                    minWidth={this.minWidth || sizes.VISUAL_IO_SIZE}
                     padding={[0,15]}
                     radius={50}
                     stroke={()=>this.powered() ? colors.POWERED_COLOR:colors.VISUAL_IO_OFF_BORDER}
