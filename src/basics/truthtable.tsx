@@ -24,13 +24,13 @@ export class TruthTable extends Node {
     public declare columnData: SimpleSignal<any[][], this>;
     @initial(true)
     @signal()
-    public declare hasSelector: SimpleSignal<any[][], this>;
+    public declare hasSelector: SimpleSignal<boolean, this>;
     public outputRow: SimpleSignal<any[], this> = createSignal(() => this.columnData()[this.currentOutputLine()]);
     public currentOutputLine: SimpleSignal<number, this> = createSignal(0);
-    private table = createRef<Layout>();
+    public readonly cellHeight = 38
+    public table = createRef<Layout>();
     private selector = createRef<Rect>();
 
-    private readonly cellHeight = 38
     private makeCell = function(yPos: number, data: any):Node {
         return (
             <Rect
@@ -82,7 +82,8 @@ export class TruthTable extends Node {
                     )}
                 />
                 
-                {this.hasSelector() &&<Rect
+                <Rect
+                    opacity={()=>this.hasSelector()?1:0}
                     ref={this.selector}
                     radius={5}
                     position={()=>[0,this.getSelectorY(this.currentOutputLine())]}
@@ -90,7 +91,7 @@ export class TruthTable extends Node {
                     height={this.cellHeight+5}
                     stroke={colors.POWERED_COLOR}
                     lineWidth={sizes.TRUTH_TABLE_BORDER_WIDTH}
-                />}
+                />
             </>
         );
     }
