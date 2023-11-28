@@ -64,13 +64,13 @@ export class Decoder extends Node {
         return this.getIOPos(n,numBits, 0)
     }
     public readonly getBottomIOPos = (n: number, numBits:number=this.numBitsOut()): Vector2 => {
-        return this.getIOPos(n,numBits, 0)
+        return this.getIOPos(n,numBits, 1)
     }
     public readonly getLeftIOPos = (n: number, numBits:number=this.numBitsOut()): Vector2 => {
-        return this.getIOPos(n,numBits, 0)
+        return this.getIOPos(n,numBits, 2)
     }
     public readonly getRightIOPos = (n: number, numBits:number=this.numBitsOut()): Vector2 => {
-        return this.getIOPos(n,numBits, 0)
+        return this.getIOPos(n,numBits, 3)
     }
 
     public constructor(props?: DecoderProps) {
