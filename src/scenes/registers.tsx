@@ -101,7 +101,7 @@ export default makeScene2D(function* (view) {
     const loadYOffset = 430
     const dataYOffset = 400
     const loadAndSpacing = 70
-    const clockHz = 4
+    const clockHz = 2
     view.fill(colors.BACKGROUND_COLOR);
     view.add(
         <>
@@ -173,6 +173,7 @@ export default makeScene2D(function* (view) {
                 <Wire
                     ref={makeRef(wires, wires.length)}
                     powered={clock().powered}
+                    isSolid
                     points={[
                         clock().position(),
                         [dLatches[dLatches.length-1].enablePos().x, clockYOffset],
@@ -183,6 +184,7 @@ export default makeScene2D(function* (view) {
                         ref={makeRef(wires, wires.length)}
                         powered={clock().powered}
                         jointStart
+                        isSolid
                         points={[
                             [latch.enablePos().x, clockYOffset],
                             latch.enablePos(),
