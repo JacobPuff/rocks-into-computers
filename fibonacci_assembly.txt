@@ -1,0 +1,48 @@
+# Fibonacci
+# $Current = addr 30
+# $Last = addr 31
+# $MemP = Memory pointer = addr 33
+
+# Registers:
+# A = 0001
+# B = 0010
+# M = 0100 # memory register
+# P = 1000 # program counter
+
+SETA        = set a reg directly to constant
+STOREA $N   = store A reg value to mem addr $N
+STOREAI     = store A immediately to wherever M reg is
+MOV $R1 $R2 = Copy data from $R1 to $R2
+LOADA $N    = set A reg to value from mem addr $N
+LOADB $N    = set B reg to value from mem addr $N
+ADD         = Adds the A and B registers, storing in A reg
+JMP $N      = sets program counter to $N
+JMPC $N     = sets program counter to $N if the carry flag is true
+HALT        = pauses clock
+
+DISCLAIMER: This assembly is no longer accurate.
+
+SETA 0
+STOREA $Last
+STOREA $Temp
+SETA 36 # Start of VRAM
+STOREA $MemP
+SETA 1
+STOREA $Current
+#Start
+# Store A reg and move pointer
+LOADB $MemP #get memory pointer for VRAM
+STOREAB #store current value in VRAM
+SETA 1
+ADD
+STOREA $MemP
+# Actual fib code
+LOADA $Current
+LOADB $Last
+STOREA $Last
+ADD
+STOREA $Current
+JMPC #end
+JMP #start
+#end
+HALT
