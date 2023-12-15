@@ -132,7 +132,6 @@ export default makeScene2D(function* (view) {
         let intermediate = binaryStr.replaceAll("1","X")
         let flipped = intermediate.replaceAll("0","1")
         flipped = flipped.replaceAll("X","0")
-        log.debug(flipped +" "+ getYPos(i*-1-3))
         return makeBinaryNum(num.toString(), flipped, numbersXPos, getYPos(i*-1-3))
     }))
     view.add(range(-4).map((num, i)=>makeDecimalNum((num-2).toString(), (num-2).toString()+" =", binaryNums[num-2])))
