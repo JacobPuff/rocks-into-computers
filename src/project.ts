@@ -14,9 +14,10 @@ import flipflop from './scenes/flipflop?scene';
 import registers from './scenes/registers?scene';
 import programCounter from './scenes/programCounter?scene';
 import theCPU from './scenes/theCPU?scene';
+import endSlide from './scenes/endSlide?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [title, siliconDisclaimer, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop, registers, programCounter, theCPU],
+  scenes: [title, siliconDisclaimer, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop, registers, programCounter, theCPU, endSlide],
   variables: {backgroundColor: '#2c2938'}
 });

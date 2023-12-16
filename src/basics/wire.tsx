@@ -1,4 +1,3 @@
-import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Circle, NodeProps, Node, Line, Knot} from '@motion-canvas/2d/lib/components';
 import { createRef, range} from '@motion-canvas/core/lib/utils';
 import { createSignal, SignalValue, SimpleSignal } from '@motion-canvas/core/lib/signals';
@@ -102,5 +101,3 @@ export class Wire extends Node {
         yield* this.progress(this.percentage, this.speed, linear).to(0,0)
     }
 }
-export default makeScene2D(function* (view) {
-});
