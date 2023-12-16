@@ -1,23 +1,23 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Rect, Txt, Node } from '@motion-canvas/2d/lib/components';
-import {Reference, beginSlide, createRef, debug, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
+import {Reference, beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { NBitRegister } from '../circuits/nBitRegister';
 import { Decoder } from '../circuits/decoder';
 import { FullAdder } from '../circuits/fullAdder';
-import { Origin, PossibleVector2 } from '@motion-canvas/core/lib/types';
+import { PossibleVector2 } from '@motion-canvas/core/lib/types';
 import { TruthTable } from '../basics/truthtable';
 import {all, waitFor} from '@motion-canvas/core/lib/flow';
 import {slideTransition} from '@motion-canvas/core/lib/transitions';
 import {Direction, Vector2} from '@motion-canvas/core/lib/types';
 import { loop, delay } from '@motion-canvas/core/lib/flow';
 import { cancel } from '@motion-canvas/core/lib/threading';
-import { Signal, SimpleSignal, createSignal } from '@motion-canvas/core/lib/signals';
+import { SimpleSignal, createSignal } from '@motion-canvas/core/lib/signals';
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
-import { easeInCubic, easeInOutCubic } from '@motion-canvas/core/lib/tweening';
+import { easeInCubic } from '@motion-canvas/core/lib/tweening';
 import { AndGate } from '../basics/and';
 
 export default makeScene2D(function* (view) {
@@ -233,8 +233,8 @@ export default makeScene2D(function* (view) {
     const rippleMini = 0.23 // On top of the miniatureScale
     const controlLogicMini = 0.05 // On top of the miniatureScale
     const backgroundOpacity = createSignal(0) //Used to fade everything in the background
-    const clockHz = 20
-    const clockSeconds = 1/clockHz/2
+    let clockHz = 3
+    let clockSeconds = 1/clockHz/2
 
     /**
      * Spacing
@@ -322,36 +322,6 @@ export default makeScene2D(function* (view) {
     busSignals[1](0)
     busSignals[2](0)
     busSignals[3](0)
-
-    const updateBus = (i:number)=>{
-        let val = false
-        if(aRegisterOut()){
-            val = val || aRegister().output()[i] == "1"
-        }
-        if(bRegisterOut()){
-            val = val || bRegister().output()[i] == "1"
-        }
-        if(enableSumOut()){
-            val = val || sumRegister().output()[i] == "1"
-        }
-        if(ramOut()){
-            let addr = parseInt(memRegister().output(), 2)
-            let line = ramTable().columnData()[addr][2]
-            let parsed = assembler(line)
-            val = val || parsed[parsed.length-bits+i] == "1"
-        }
-        if (programCounterOut()){
-            let output = programCounter().output()
-            val = val || output[i] == "1"
-        }
-        if(instructionRegisterOut()){
-            let output = instructionRegister().output().slice(bits)
-            val = val || output[i] == "1"
-        }
-        let num = val ? 1 : 0
-        busBuffer = busBuffer.slice(0,i) + num.toString() + busBuffer.slice(i+1)
-        return num
-    }
 
     busSignals.map((v,i)=>v(()=>{
         let val = false
@@ -886,7 +856,6 @@ export default makeScene2D(function* (view) {
                 ref={makeRef(wires, wires.length)}
                 powered={rippleAdders[i].sum}
                 isSolid
-                jointEnd
                 points={[
                     betweenParents([rippleAdders[i].sumPos.x, rippleAdders[i].sumPos.y-70], rippleAdder(), sumRegisterNode()),
                     betweenParents([rippleAdders[i].sumPos.x, rippleAdders[i].sumPos.y-185+sumWireSpace*i], rippleAdder(), sumRegisterNode()),
@@ -897,7 +866,7 @@ export default makeScene2D(function* (view) {
                         betweenParents([rippleAdders[bits-1].sumPos.x-((bits-1)*sumWireSpace)+sumWireSpace*i,0], rippleAdder(), sumRegisterNode()).x,
                         fromWorld(sumRegister().getInputPos(bits-1-i), sumRegisterNode()).y
                     ],
-                    fromWorld([sumRegister().getInputPos(bits-1-i).x+15, sumRegister().getInputPos(bits-1-i).y], sumRegisterNode())
+                    [sumRect().bottom().x, fromWorld(sumRegister().getInputPos(bits-1-i), sumRegisterNode()).y]
                 ]}
             />)}
             <VisualIO
@@ -2105,10 +2074,6 @@ export default makeScene2D(function* (view) {
     )
     clockIO().moveAbove(controlLogicRect())
     moveWiresToBottom();
-
-
-
-    // TODO: Add not gate for micro counter clock offset
     
     introInstrTable().columnNames(["Instruction", "Description"])
     introInstrTable().columnData(
@@ -2476,8 +2441,11 @@ export default makeScene2D(function* (view) {
         "HALT",
     ])
 
+    yield* beginSlide('program loaded')
+    clockHz = 20
+    clockSeconds = 1/clockHz/2
     clockEnable(true)
-    yield* waitFor(35)
+    yield* waitFor(1941/2/clockHz)
     yield* beginSlide('stopping point')
 
     yield* beginSlide("the next one")
