@@ -1,6 +1,7 @@
 import {makeProject} from '@motion-canvas/core';
 
 import example from './scenes/example?scene';
+import title from './scenes/title?scene';
 import notGate from './scenes/notGate?scene';
 import andGates from './scenes/andGates?scene';
 import orGates from './scenes/orGates?scene';
@@ -15,6 +16,6 @@ import theCPU from './scenes/theCPU?scene';
 // import help from './scenes/help?scene';
 
 export default makeProject({
-  scenes: [notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop, registers, programCounter, theCPU],
+  scenes: [title, notGate, andGates, orGates, halfAdder, fullAdder, twosCompliment, clock, flipflop, registers, programCounter, theCPU],
   variables: {backgroundColor: '#2c2938'}
 });
