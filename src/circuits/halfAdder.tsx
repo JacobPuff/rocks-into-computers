@@ -1,4 +1,4 @@
-import {Circle, NodeProps, Node, Txt, Rect} from '@motion-canvas/2d/lib/components';
+import { NodeProps, Node, Txt, Rect} from '@motion-canvas/2d/lib/components';
 import { SignalValue, SimpleSignal, createSignal } from '@motion-canvas/core/lib/signals';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
 import { Vector2 } from '@motion-canvas/core/lib/types';
