@@ -1,16 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
-import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {Reference, beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
-import { AndGate } from '../basics/and';
-import { VisualIO } from '../basics/visualIO';
-import { Wire } from '../basics/wire';
-import { TruthTable } from '../basics/truthtable';
-import {all, waitFor} from '@motion-canvas/core/lib/flow';
-import {slideTransition} from '@motion-canvas/core/lib/transitions';
-import {Direction, Vector2} from '@motion-canvas/core/lib/types';
-import { loop, delay } from '@motion-canvas/core/lib/flow';
-import { cancel } from '@motion-canvas/core/lib/threading';
-import { createSignal } from '@motion-canvas/core/lib/signals';
+import {Txt} from '@motion-canvas/2d/lib/components';
+import {beginSlide} from '@motion-canvas/core/lib/utils';
 import * as colors from '../globalColors' 
 import * as sizes from '../globalSizes' 
 
