@@ -14,7 +14,7 @@ const RED = '#FF6470';
 const GREEN = '#99C47A';
 const BLUE = '#68ABDF';
 
-export const Trail = (props: LayoutProps) => (
+const Trail = (props: LayoutProps) => (
     <Layout
         layout
         direction={'column'}
