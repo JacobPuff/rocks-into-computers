@@ -44,22 +44,22 @@ export default makeScene2D(function* (view) {
 
     const rippleSize = 8
     const rippleAdders: FullAdder[] = []
-    range(rippleSize).forEach(i=> (
-        rippleAdders.push(
+    range(rippleSize).forEach(i=> 
             <FullAdder
+                ref={makeRef(rippleAdders, rippleAdders.length)}
                 position={[i*-rippleSpacing,0]}
                 inputA={()=>getInput(i,0,rippleTable())}
                 inputB={()=>getInput(i,1,rippleTable())}
                 carryIn={rippleAdders[i-1]?.carryOut || carryIn}
                 opacity={0}
             />
-        )
-    ))
+    )
     const fullAdder = rippleAdders[0]
     fullAdder.inputA(inputA)
     fullAdder.inputB(inputB)
-    const rippleWires: Layout[] = rippleAdders.map((rippleAdder,i)=>(
-        <Layout opacity={0}>
+    const rippleWires: Layout[] = []
+    rippleAdders.map((rippleAdder,i)=>(
+        <Layout ref={makeRef(rippleWires, rippleWires.length)} opacity={0}>
             <Wire
                 ref={makeRef(wires, wires.length)}
                 powered={()=>getInput(i,0,rippleTable())}

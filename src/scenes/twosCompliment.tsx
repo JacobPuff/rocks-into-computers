@@ -84,6 +84,7 @@ export default makeScene2D(function* (view) {
 
     const getYPos = (i:number)=>100+i*50
     const numbersXPos = -400
+    yield* slideTransition(Direction.Right, 1);
     yield* beginSlide("subtraction intro");
     const bitLength = 4
     const insertNumberDelay = 0.1
@@ -129,9 +130,9 @@ export default makeScene2D(function* (view) {
     view.add(range(-4).map((num, i)=>{
         num = num-2
         let binaryStr = (num*-1).toString(2).padStart(bitLength, "0")
-        let intermediate = binaryStr.replaceAll("1","X")
-        let flipped = intermediate.replaceAll("0","1")
-        flipped = flipped.replaceAll("X","0")
+        let intermediate = binaryStr.replace(/1/g,"X")
+        let flipped = intermediate.replace(/0/g,"1")
+        flipped = flipped.replace(/X/g,"0")
         return makeBinaryNum(num.toString(), flipped, numbersXPos, getYPos(i*-1-3))
     }))
     view.add(range(-4).map((num, i)=>makeDecimalNum((num-2).toString(), (num-2).toString()+" =", binaryNums[num-2])))
