@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, finishScene, makeRef} from '@motion-canvas/core/lib/utils';
 import { AndGate } from '../basics/and';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
@@ -198,6 +198,9 @@ export default makeScene2D(function* (view) {
         nandUnit().opacity(1, 1),
     )
     yield* beginSlide("nand gate");
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });

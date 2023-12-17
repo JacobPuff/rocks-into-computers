@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {Reference, beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
+import {Reference, beginSlide, createRef, finishScene, makeRef} from '@motion-canvas/core/lib/utils';
 import { OrGate } from '../basics/or';
 import { XorGate } from '../basics/xor';
 import { VisualIO } from '../basics/visualIO';
@@ -246,6 +246,9 @@ export default makeScene2D(function* (view) {
         xnorUnit().opacity(1,1),
     )
     yield* beginSlide("xnor gate");
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });

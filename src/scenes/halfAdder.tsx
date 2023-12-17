@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef, useLogger} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, finishScene, makeRef, useLogger} from '@motion-canvas/core/lib/utils';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
@@ -280,6 +280,9 @@ export default makeScene2D(function* (view) {
         delay(0.7,slideTitle().text("Half Adder",1)),
     )
     yield* beginSlide("scaled down circuit, reveal HalfAdder");
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });

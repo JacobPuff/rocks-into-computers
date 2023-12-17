@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Rect, Txt, Node } from '@motion-canvas/2d/lib/components';
-import {Reference, beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
+import {Reference, beginSlide, createRef, finishScene, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
@@ -2463,6 +2463,8 @@ export default makeScene2D(function* (view) {
         return count
     }
     log.info("Num Children: "+countChildren(view).toString())
-    cancel(bgAnimateWires);
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgRunClock);
 });

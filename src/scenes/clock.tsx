@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Txt } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, finishScene, makeRef} from '@motion-canvas/core/lib/utils';
 import { NotGate } from '../basics/not';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
@@ -128,5 +128,7 @@ export default makeScene2D(function* (view) {
     yield* beginSlide("ring oscillator");
     yield* propagationDelay(1/6,1)
     yield* beginSlide("1 Hz clock");
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
 });

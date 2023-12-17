@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, finishScene, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
@@ -176,6 +176,9 @@ export default makeScene2D(function* (view) {
     yield* beginSlide("async counter")
     yield* slideTitle().text("Program Counter", 1)
     yield* beginSlide("program counter")
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
     cancel(bgRunClock);
 });

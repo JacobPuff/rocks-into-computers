@@ -1,6 +1,6 @@
 import {makeScene2D} from '@motion-canvas/2d/lib/scenes';
 import {Layout, Txt, Node } from '@motion-canvas/2d/lib/components';
-import {beginSlide, createRef, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
+import {beginSlide, createRef, finishScene, makeRef, range, useLogger} from '@motion-canvas/core/lib/utils';
 import { VisualIO } from '../basics/visualIO';
 import { Wire } from '../basics/wire';
 import { TruthTable } from '../basics/truthtable';
@@ -687,6 +687,9 @@ export default makeScene2D(function* (view) {
     tinyDLatchIntroComponents().moveToBottom()
     yield* tinyDLatchIntroComponents().opacity(1,1)
     yield* beginSlide("Gated D Latch circuit")
+    
+    finishScene();
+    yield* waitFor(1);
     cancel(bgAnimateWires);
     cancel(bgSelectRows);
 });
