@@ -967,6 +967,13 @@ export default makeScene2D(function* (view) {
                 position={[programCounterRect().top().x+50+90,programCounterRect().position.y()]}
                 powered={programCounterIn}
             />
+            <VisualIO
+                scale={1+miniatureScale}
+                name={"Counter Enable"}
+                rotation={90}
+                position={[programCounterRect().bottom().x-55,programCounterRect().position.y()]}
+                powered={counterEnable}
+            />
         </Node>)
     yield* programCounterNode().opacity(1,1)
     programCounterNode().opacity(backgroundOpacity)
@@ -979,14 +986,33 @@ export default makeScene2D(function* (view) {
      */
     const clock = createSignal(false);
     const clockIO = createRef<VisualIO>();
-    view.add(<VisualIO
-        opacity={0}
-        ref={clockIO}
-        scale={miniatureScale}
-        name={"Clock"}
-        powered={clock}
-        position={[-generalBusDistance-clockExtraXDist, clockYPos]}
-    />)
+    view.add(<>
+        <VisualIO
+            opacity={0}
+            ref={clockIO}
+            scale={miniatureScale}
+            name={"Clock"}
+            powered={clock}
+            position={[-generalBusDistance-clockExtraXDist, clockYPos]}
+        />
+    </>)
+
+    // Clock to counter enable
+    wireLayouts.programCounterWires.add(
+        <Node ref={makeRef(wireLayouts, "counterEnableWire")} opacity={0}>
+            <Wire
+                ref={makeRef(wires, wires.length)}
+                powered={clock}
+                isSolid
+                points={[
+                    betweenParents(clockIO().position(), view, programCounterNode()),
+                    [programCounterRect().bottom().x-55, betweenParents(clockIO().position(), view, programCounterNode()).y],
+                    [programCounterRect().bottom().x-55,programCounterRect().position.y()],
+                ]}
+            />
+        </Node>
+    )
+    moveWiresToBottom();
 
     // Handle clock stuff
     const initialClockHandler = ()=> {
@@ -1025,7 +1051,10 @@ export default makeScene2D(function* (view) {
         yield* waitFor(clockSeconds)
         initialClockHandler()
     })
-    yield* clockIO().opacity(1,0.5)
+    yield* all(
+        clockIO().opacity(1,0.5),
+        wireLayouts.counterEnableWire.opacity(1,0.5)
+    )
     clockIO().opacity(backgroundOpacity)
 
     // demonstration program counter
@@ -2116,22 +2145,6 @@ export default makeScene2D(function* (view) {
             fontWeight={sizes.DEFAULT_FONT_WEIGHT}
             fill={colors.TEXT_COLOR}
             fontFamily="Helvetica"
-            text={()=>"M: "+parseInt(memRegister().output(),2).toString()}
-        />
-        <Txt
-            fontSize={20}
-            width={debugWidth}
-            fontWeight={sizes.DEFAULT_FONT_WEIGHT}
-            fill={colors.TEXT_COLOR}
-            fontFamily="Helvetica"
-            text={()=>"I: "+instructionMap[parseInt(instructionRegister().output().slice(0,bits),2)]+" "+parseInt(instructionRegister().output().slice(bits),2).toString()}
-        />
-        <Txt
-            fontSize={20}
-            width={debugWidth}
-            fontWeight={sizes.DEFAULT_FONT_WEIGHT}
-            fill={colors.TEXT_COLOR}
-            fontFamily="Helvetica"
             text={()=>"A: "+parseInt(aRegister().output(),2).toString()}
         />
         <Txt
@@ -2141,6 +2154,22 @@ export default makeScene2D(function* (view) {
             fill={colors.TEXT_COLOR}
             fontFamily="Helvetica"
             text={()=>"B: "+parseInt(bRegister().output(),2).toString()}
+        />
+        <Txt
+            fontSize={20}
+            width={debugWidth}
+            fontWeight={sizes.DEFAULT_FONT_WEIGHT}
+            fill={colors.TEXT_COLOR}
+            fontFamily="Helvetica"
+            text={()=>"M: "+parseInt(memRegister().output(),2).toString()}
+        />
+        <Txt
+            fontSize={20}
+            width={debugWidth}
+            fontWeight={sizes.DEFAULT_FONT_WEIGHT}
+            fill={colors.TEXT_COLOR}
+            fontFamily="Helvetica"
+            text={()=>"I: "+instructionMap[parseInt(instructionRegister().output().slice(0,bits),2)]+" "+parseInt(instructionRegister().output().slice(bits),2).toString()}
         />
     </Layout>)
 
