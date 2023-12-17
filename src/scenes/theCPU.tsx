@@ -2481,10 +2481,9 @@ export default makeScene2D(function* (view) {
     clockHz = 20
     clockSeconds = 1/clockHz/2
     clockEnable(true)
-    yield* waitFor(1941/2/clockHz)
-    yield* beginSlide('stopping point')
+    yield* waitFor((1941/2/clockHz) + 1)
 
-    yield* beginSlide("the next one")
+    yield* beginSlide("program finished")
     
     const countChildren = (node: Node) => {
         let list = [node]
