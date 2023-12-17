@@ -2306,6 +2306,13 @@ export default makeScene2D(function* (view) {
                     load={enableAdder}
                 />
             </Rect>
+            <VisualIO
+                rotation={90}
+                scale={1+miniatureScale}
+                powered={enableAdder}
+                position={flagsRegisterRect().bottom().add([-55,0])}
+                name="Enable Adder"
+            />
         </Node>
     </>)
     flagsRegisterRect().width((flagsRegisterRect().children()[0] as Txt).width()+30)
@@ -2321,7 +2328,7 @@ export default makeScene2D(function* (view) {
                 points={[
                     betweenParents(overflowIOPos, rippleAdder(), flagsRegisterNode()),
                     [betweenParents(overflowIOPos, rippleAdder(), flagsRegisterNode()).x, fromWorld(flagsRegister().getInputPos(0), flagsRegisterNode()).y],
-                    fromWorld(flagsRegister().getInputPos(0), flagsRegisterNode()),
+                    fromWorld(flagsRegister().getInputPos(0).addX(-20), flagsRegisterNode()),
                 ]}
             />
             {/* From flags register to JMPC instr */}
@@ -2330,7 +2337,7 @@ export default makeScene2D(function* (view) {
                 isSolid
                 powered={()=>flagsRegister().output()[overflowFlagBitIndex]=="1"}
                 points={[
-                    fromWorld(flagsRegister().getOutputPos(0), flagsRegisterNode()),
+                    [flagsRegisterRect().top().x, fromWorld(flagsRegister().getOutputPos(0), flagsRegisterNode()).y],
                     fromWorld(flagsRegister().getOutputPos(0).addX(70), flagsRegisterNode()),
                     fromWorld(flagsRegister().getOutputPos(0).add([70, 480]), flagsRegisterNode()),
                     fromWorld(flagsRegister().getOutputPos(0).add([-550, 480]), flagsRegisterNode()),
