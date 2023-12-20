@@ -876,6 +876,13 @@ export default makeScene2D(function* (view) {
                 position={[sumRect().top().x-50,sumRect().position.y()]}
                 powered={enableSumOut}
             />
+            <VisualIO
+                scale={1+miniatureScale}
+                name={"Enable Adder"}
+                rotation={-90}
+                position={[sumRect().bottom().x+50,sumRect().position.y()]}
+                powered={enableAdder}
+            />
     </Node>)
 
     
