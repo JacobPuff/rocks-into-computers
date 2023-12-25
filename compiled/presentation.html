@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://motioncanvas.io/editor/style.css" />
+
+    <!-- Used for rendering codeblock components. Do not delete. -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/highlightjs@9.16.2/styles/atom-one-dark.css"
+    />
+
+    <title>Motion Canvas Presentation</title>
+  </head>
+  <body>
+
+    <script type="module" type="text/javascript">
+      import project from "./project.js";
+      // this will fetch the latest compiled version of the motion canvas editor.
+      // make sure your project is up to date with the latest release (or make a
+      // local copy of this file at the version used in your project) 
+      import { editor } from "https://motioncanvas.io/editor/main.js";
+      editor(project);
+    </script>
+
+  </body>
+</html>
