@@ -66,6 +66,13 @@ export default makeScene2D(function* (view) {
                     fontFamily="Helvetica"
                     text={"- Code: The Hidden Language of Computer Hardware and Software, by Charles Petzold (Book)"}
                 />
+                <Txt
+                    fontSize={40}
+                    fontWeight={sizes.DEFAULT_FONT_WEIGHT}
+                    fill={colors.TEXT_COLOR}
+                    fontFamily="Helvetica"
+                    text={"- Slides available at https://github.com/JacobPuff/rocks-into-computers"}
+                />
             </Layout>
         </>
     );
