@@ -15,4 +15,4 @@ You can also `npm install` in the root directory, and run `npm run serve`.
 
 ### Finished CPU
 A video of the full CPU in action, generating the fibbonaci sequence.
-![](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/fullCPU.mp4)
+![test](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/fullCPU.webp)
