@@ -1,6 +1,8 @@
 # Rocks Into Computers
 A presentation on some computer internals and how we combine them to do useful things.
 
+This presentation uses Motion Canvas, a code driven animation software, and takes us from basic logic gates all the way to a full CPU with our own custom instruction set.
+
 ### Running
 To view the slides, you need to run the local server in the `compiled/` folder:
 - if you're on linux run `runServe`
@@ -10,3 +12,7 @@ To view the slides, you need to run the local server in the `compiled/` folder:
 Then go to `localhost:8080/presentation.html`, and find the "Video Settings". In the video settings click the dropdown next to "RENDER" and click the "PRESENT" option. Then hit the present button and you're good to go.
 
 You can also `npm install` in the root directory, and run `npm run serve`.
+
+### Finished CPU
+A video of the full CPU in action, generating the fibbonaci sequence.
+!(https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/fullCPU.mp4)
