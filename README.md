@@ -14,5 +14,5 @@ Then go to `localhost:8080/presentation.html`, and find the "Video Settings". In
 You can also `npm install` in the root directory, and run `npm run serve`.
 
 ### Finished CPU
-A video of the full CPU in action, generating the fibbonaci sequence.
-![test](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/fullCPU.webp)
+A video showing 30 second of the CPU in action.
+![A video showing 30 second of the CPU in action.](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/fullCPU.webp)
