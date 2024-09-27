@@ -14,5 +14,5 @@ Then go to `localhost:8080/presentation.html`, and find the "Video Settings". In
 You can also `npm install` in the root directory, and run `npm run serve`.
 
 ### Finished CPU
-A video showing 30 second of the CPU in action.
-![A video showing 30 second of the CPU in action.](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/exampleFullCPU.webp)
+A video showing 30 seconds of the finished CPU in action.
+![A video showing 30 seconds of the finished CPU in action.](https://raw.githubusercontent.com/JacobPuff/rocks-into-computers/main/exampleFullCPU.webp)
